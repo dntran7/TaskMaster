@@ -12,6 +12,7 @@ public class TaskMaster extends Application
 {
     private GUI1 a;
     private ArrayList<Task> taskList;
+    private ArrayList<Task> record;
 
     public void start(Stage stage)
     {

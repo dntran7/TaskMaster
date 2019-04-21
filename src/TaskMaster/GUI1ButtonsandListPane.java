@@ -1,10 +1,12 @@
 package TaskMaster;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;	//**Need to import to handle event
+import javafx.event.Event;
 import javafx.event.EventHandler;	//**Need to import to handle event
 
 import java.awt.Panel;
@@ -38,6 +40,8 @@ public class GUI1ButtonsandListPane extends HBox{
 		Change.setPrefHeight(100);
 		Complete.setPrefHeight(100);
 		
+		Delete.setOnAction(new deleteButton());
+		
 		Pane addPane = new Pane();
 		buttonlist.setPrefWidth(400);
 		addPane.getChildren().add(Add);
@@ -53,14 +57,26 @@ public class GUI1ButtonsandListPane extends HBox{
 		
 		
 		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
-		list.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		ObservableList<Task> aList = FXCollections.observableArrayList(list);
+		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
+		ObservableList<Task> aList = FXCollections.observableArrayList(taskList);
 		listView = new ListView<Task> (aList);
 		listView.setPrefWidth(400);
 		this.getChildren().addAll(buttonlist,listView);
-		
-	}
 	
+	}
+ private class deleteButton implements EventHandler<ActionEvent> 
+	{	
 	//Missing Listeners
+
+	@Override
+	public void handle(ActionEvent event) {
+		// TODO Auto-generated method stub
+				int index = (listView.getSelectionModel().getSelectedIndex());
+				if(index>=0)
+				{listView.getItems().remove(index);
+				taskList.remove(index);
+				}
+	}
+	}
 		
 }
