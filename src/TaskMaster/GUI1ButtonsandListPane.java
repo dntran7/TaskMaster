@@ -1,9 +1,12 @@
 package TaskMaster;
+
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.EventHandler;	//**Need to import to handle event
 
@@ -19,7 +22,7 @@ public class GUI1ButtonsandListPane extends HBox{
 	private Button Delete;
 	private Button Change;
 	private Button Complete;
-	public GUI1ButtonsandListPane(ArrayList<Task> list)
+	public GUI1ButtonsandListPane(ArrayList<Task> list, Stage stage, Scene scene1)
 	{
 		this.taskList = list;
 		VBox buttonlist = new VBox();
@@ -27,6 +30,9 @@ public class GUI1ButtonsandListPane extends HBox{
 		Delete = new Button("Delete");
 		Change = new Button("Change");
 		Complete = new Button("Complete");
+		
+		
+		addFunct(Add, stage, scene1);
 
 		Add.setPrefWidth(400);
 		Delete.setPrefWidth(400);
@@ -53,12 +59,29 @@ public class GUI1ButtonsandListPane extends HBox{
 		
 		
 		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
-		listView = new ListView<Task> ();
+		list.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
+		ObservableList<Task> aList = FXCollections.observableArrayList(list);
+		listView = new ListView<Task> (aList);
 		listView.setPrefWidth(400);
 		this.getChildren().addAll(buttonlist,listView);
+		
+		
+		
+		
 		
 	}
 	
 	//Missing Listeners
+	
+	
+	
+	public void addFunct(Button button, Stage stage, Scene scene1) {
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				AddWindow addW = new AddWindow(taskList, stage, scene1);
+			}
+		});
+	}
 		
 }
