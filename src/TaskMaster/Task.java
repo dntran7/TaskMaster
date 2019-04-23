@@ -6,8 +6,8 @@ import java.util.Date;
 public class Task {
 	private String description;
 	private int priority;
-	private int stmonth, stday, styear;
-	private int enmonth, enday, enyear;
+	private int stmonth, stday, styear, stdate;
+	private int enmonth, enday, enyear, endate;
 	private String status;
 	
 	
@@ -16,19 +16,23 @@ public class Task {
 		
 	}
 	
-	public Task(String description, int prioirty, int stmonth, int stday, int styear, int endmonth, int endday, int endyear, String status)
+	public Task(String description, int prior, int stmonth, int stday, int styear, int endmonth, int endday, int endyear, String status)
 	{
 		this.description = description;
-		this.priority = priority;
+		this.priority = prior;
 
 		this.enmonth = endmonth;
 		this.enday = endday;
 		this.enyear = endyear;
+		String temp = Integer.toString(endyear)+Integer.toString(endmonth)+Integer.toString(endday);
+		this.endate = Integer.parseInt(temp);
 		
 
 		this.stmonth = stmonth;
 		this.stday = stday;
 		this.styear = styear;
+		temp = Integer.toString(styear)+Integer.toString(stmonth)+Integer.toString(stday);
+		this.stdate = Integer.parseInt(temp);
 		
 		this.status = status;
 	}
@@ -80,7 +84,7 @@ public class Task {
 
 
 	public void setstYear(int year) {
-		this.styear = styear;
+		this.styear = year;
 	}
 	
 	public int getenMonth() {
@@ -108,8 +112,8 @@ public class Task {
 	}
 
 
-	public void setenYear(int syear) {
-		this.enyear = syear;
+	public void setenYear(int year) {
+		this.enyear = year;
 	}
 
 	public String getStatus() {
@@ -120,6 +124,15 @@ public class Task {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public int getenDate() {
+		return endate;
+	}
+	
+	public int getstDate() {
+		return stdate;
+	}
+
 	
 	public String toString()
 	{
@@ -132,6 +145,7 @@ public class Task {
 
 		a+="Status:\t\t\t" +status+"\n";
 		
+		//return "KOPKO";
 		return a;
 	}
 }
