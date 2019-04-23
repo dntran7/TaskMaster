@@ -108,8 +108,8 @@ public class Task {
 	}
 
 
-	public void setenYear(int year) {
-		this.enyear = enyear;
+	public void setenYear(int syear) {
+		this.enyear = syear;
 	}
 
 	public String getStatus() {

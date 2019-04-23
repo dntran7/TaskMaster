@@ -2,6 +2,7 @@
     
 package TaskMaster;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -17,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.EventHandler;	//**Need to import to handle event
 import javafx.geometry.Insets;
@@ -29,10 +31,10 @@ public class GUI1 extends BorderPane{
 	
 	private Button print;
 	private Label error;
-	public GUI1(ArrayList<Task> list)
+	public GUI1(ArrayList<Task> list,Stage stage, Scene scene)
 	{
 		this.taskList = list;
-		a = new GUI1ButtonsandListPane(list);
+		a = new GUI1ButtonsandListPane(list,stage,scene);
 		this.setCenter(a);
 		
 		

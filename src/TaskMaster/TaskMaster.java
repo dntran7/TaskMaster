@@ -20,11 +20,10 @@ public class TaskMaster extends Application
 
         //movieList to be used in both createPane & reviewPane
         taskList = new ArrayList<Task>();
-
-        a = new GUI1(taskList);
+        Scene scene = new Scene(root, 800, 550);
+        a = new GUI1(taskList, stage, scene);
         root.getChildren().add(a);
 
-        Scene scene = new Scene(root, 800, 550);
         stage.setTitle("TaskMaster");
         stage.setScene(scene);
         stage.show();
