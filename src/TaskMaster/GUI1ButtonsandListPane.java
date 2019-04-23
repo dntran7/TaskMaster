@@ -56,7 +56,7 @@ public class GUI1ButtonsandListPane extends HBox{
 
 		Complete.setOnAction(new completeButton());
 
-		Change.setOnAction(new editButton());
+		editFunct(Change, stage, scene);
 		
 		Pane addPane = new Pane();
 		buttonlist.setPrefWidth(400);
@@ -83,19 +83,22 @@ public class GUI1ButtonsandListPane extends HBox{
 	}
 	
 	
-	 private class editButton implements EventHandler<ActionEvent> 
-		{	
-		//Missing Listeners
-
-		@Override
+	public void editFunct(Button button, Stage stage, Scene scene1) {
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 		public void handle(ActionEvent event) {
 			// TODO Auto-generated method stub
 					int index = (listView.getSelectionModel().getSelectedIndex());
 					if(index>=0)
 					{
+					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
-		}
-		}
+					else {
+						
+					}
+			}
+		});
+	}
 	 
  private class deleteButton implements EventHandler<ActionEvent> 
 	{	
@@ -160,7 +163,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				AddWindow addW = new AddWindow(taskList, stage, scene1);
+				AddWindow addW = new AddWindow(taskList, stage, scene1, -1);
 			}
 		});
 	}

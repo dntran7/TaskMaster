@@ -30,7 +30,9 @@ import javafx.event.EventHandler;	//**Need to import to handle event
 */
 public class AddWindow{
 	private Scene addScene;
-	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1) {
+	private TextField priorityInput;
+	private ArrayList<Task> newList;
+	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1, int index) {
 		VBox layout = new VBox(20);
 		
 		layout.setPadding(new Insets(15,12,15,12));
@@ -55,17 +57,15 @@ public class AddWindow{
 		
 		
    /**************Priority layout setup****************/
-		
 		HBox prioLayout = new HBox(10);
+		if(index!=-1) {
 		Label priorityLabel = new Label("Priority:");
 		priorityLabel.setStyle("-fx-font: 24 arial");
 		TextField priorityInput = new TextField();
 		priorityInput.setPrefHeight(30);
 		priorityInput.setPrefWidth(85);
 		prioLayout.getChildren().addAll(priorityLabel, priorityInput);
-		
-		
-		
+		}
 	
 		//Start date label
 		Label startDate = new Label("Start date:");
@@ -186,8 +186,13 @@ public class AddWindow{
 		buttonLayout.getChildren().addAll(back, save);
 		
 		
-		
-		layout.getChildren().addAll(grid, descriptionInput, prioLayout, startDate, date1Layout, endDate, date2Layout, progressLayout, buttonLayout); //Sets main vbox layout
+		if(index!=-1) {
+			layout.getChildren().addAll(grid, descriptionInput, prioLayout);
+		}
+		if(index==-1) {
+			layout.getChildren().addAll(grid, descriptionInput);
+		}
+		layout.getChildren().addAll(startDate, date1Layout, endDate, date2Layout, progressLayout, buttonLayout); //Sets main vbox layout
 		
 		
 		addScene = new Scene(layout, 800, 550);
@@ -201,6 +206,32 @@ public class AddWindow{
 				mainWindow.setScene(scene1);
 			}
 		});
+		if(index==-1) {
+		save.setOnAction(new EventHandler<ActionEvent>() { //Back button functionality
+			@Override
+			public void handle(ActionEvent event) {
+				newList = list; 
+				if(checkInt(day1Input) && checkInt(year1Input) && checkInt(year2Input) && checkInt(day2Input)) {
+					if(index==-1) {
+						int monthIndex1 = getMonthNum(months1);
+						int monthIndex2 = getMonthNum(months2);
+						
+						
+						Task newTask = new Task(descriptionInput.getText(), list.size()+1, monthIndex1, Integer.parseInt(day1Input.getText()),
+							     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
+					   newList.add(newTask);
+						
+						
+					}
+				
+						mainWindow.setScene(scene1);
+				}else {
+					System.out.println("Please make sure correct fields are integers");
+				}
+				
+			}
+		});
+		}
 	}
 	
 	private boolean checkInt(TextField field) { //Checks if textfield entry is an integer 
@@ -211,5 +242,80 @@ public class AddWindow{
 			} catch(NumberFormatException e){
 				return false;
 			}
+	}
+	public Scene getScene() {
+		return addScene;
+	}
+	
+	public ArrayList<Task> getNewList(){
+		return newList;
+	}
+	
+	private int getMonthNum(ComboBox monthBox)
+	{
+		int result = 0;
+		String month=monthBox.getValue().toString();
+		
+		if (month.equals("January"))
+		{
+			result = 1;
+			
+		}
+		else if (month.equals("February"))
+		{
+			result =2;
+			
+		}
+		else if (month.equals("March"))
+		{
+			result =3; 
+			
+		}
+		else if (month.equals("April"))
+		{
+			result =4;
+		}
+		else if (month.equals("May"))
+		{
+			result = 5;
+			
+		}
+		else if (month.equals("June"))
+		{
+			result = 6;
+			
+		}
+		else if (month.equals("July"))
+		{
+			result =7;
+		}
+		else if (month.equals("August"))
+		{
+			result = 8;
+			
+		}
+		else if (month.equals("September"))
+		{
+			result = 9;
+			
+		}
+		else if (month.equals("Ocotober"))
+		{
+			result = 10;
+		}
+		else if (month.equals("November"))
+		{
+			result = 11;
+			
+		}
+		else if (month.equals("December"))
+		{
+			result = 12;
+			
+		}
+		
+		return result;
+		
+
 	}
 }

@@ -77,6 +77,15 @@ public class GUI1 extends BorderPane{
 		
 		//Bottom part of the GUI
 		print = new Button("print");
+		
+		
+		print.setOnAction((e)->
+		{
+			ExportGUI export = new ExportGUI();
+			export.ExportGUI(list, stage, scene);
+		});
+		
+		
 		error = new Label();
 		
 		error.setText("Error message is here");
