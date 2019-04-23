@@ -22,9 +22,6 @@ public class TaskMaster extends Application
 
         a = new GUI1(taskList);
         root.getChildren().add(a);
-        
-        
-        
 
         Scene scene = new Scene(root, 800, 550);
         stage.setTitle("TaskMaster");
