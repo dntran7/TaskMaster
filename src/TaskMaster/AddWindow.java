@@ -81,7 +81,7 @@ public class AddWindow{
 		HBox date1Layout = new HBox(10);
 		Label monthLabel1 = new Label("Month:");
 		monthLabel1.setStyle("-fx-font: 18 arial");
-		ComboBox months1 = new ComboBox();
+		ComboBox<String> months1 = new ComboBox<String>();
 		months1.getItems().addAll(
 				"January",
 				"February",
@@ -96,11 +96,37 @@ public class AddWindow{
 				"November",
 				"December"
 				);
+
 		Label dayLabel1 = new Label("Day:");
 		dayLabel1.setStyle("-fx-font: 18 arial");
-		TextField day1Input = new TextField();
-		day1Input.setPrefHeight(30);
-		day1Input.setPrefWidth(85);
+		ComboBox<Integer> day1Input = new ComboBox<Integer>();
+		ObservableList<Integer> day1Array = arrayOfNums(30);
+		day1Input.getItems().addAll(day1Array);
+		
+		months1.setOnAction(new EventHandler<ActionEvent>() { //Changes days based on month selection
+			@Override
+			public void handle(ActionEvent event) {
+				if(months1.getValue().toString()=="January" || months1.getValue().toString()=="March" || months1.getValue().toString()=="May" ||
+						months1.getValue().toString()=="July"|| months1.getValue().toString()=="August"|| months1.getValue().toString()=="October"|| months1.getValue().toString()=="December") {
+					ObservableList<Integer> day1Array = arrayOfNums(31);
+					day1Input.getItems().clear();
+					day1Input.getItems().addAll(day1Array);
+				}
+				else if(months1.getValue().toString()=="February") {
+					ObservableList<Integer> day1Array = arrayOfNums(28);
+					day1Input.getItems().clear();
+					day1Input.getItems().addAll(day1Array);
+				}
+				else {
+					ObservableList<Integer> day1Array = arrayOfNums(30);
+					day1Input.getItems().clear();
+					day1Input.getItems().addAll(day1Array);
+				}
+					
+			}
+		});
+		//day1Input.setPrefHeight(30);
+		//day1Input.setPrefWidth(85);
 		
 		Label yearLabel1 = new Label("Year:");
 		yearLabel1.setStyle("-fx-font: 18 arial");
@@ -123,7 +149,7 @@ public class AddWindow{
 		date2Layout.setSpacing(10);
 		Label monthsLabel2 = new Label("Month:");
 		monthsLabel2.setStyle("-fx-font: 18 arial");
-		ComboBox months2 = new ComboBox();
+		ComboBox<String> months2 = new ComboBox<String>();
 		months2.getItems().addAll(
 				"January",
 				"February",
@@ -141,11 +167,35 @@ public class AddWindow{
 
 		Label dayLabel2 = new Label("Day:");
 		dayLabel2.setStyle("-fx-font: 18 arial");
-		TextField day2Input = new TextField();
-		//int[] array = arrayOfNums(30);
-		//day2Input.getItems().addAll(array);
-		day2Input.setPrefHeight(30);
-		day2Input.setPrefWidth(85);
+		ComboBox<Integer> day2Input = new ComboBox<Integer>();
+		ObservableList<Integer> day2Array = arrayOfNums(30);
+		day2Input.getItems().addAll(day2Array);
+	
+		months2.setOnAction(new EventHandler<ActionEvent>() { //Back button functionality
+			@Override
+			public void handle(ActionEvent event) {
+				if(months2.getValue().toString()=="January" || months2.getValue().toString()=="March" || months2.getValue().toString()=="May" ||
+						months2.getValue().toString()=="July"|| months2.getValue().toString()=="August"|| months2.getValue().toString()=="October"|| months2.getValue().toString()=="December") {
+					ObservableList<Integer> day2Array = arrayOfNums(31);
+					day2Input.getItems().clear();
+					day2Input.getItems().addAll(day2Array);
+				}
+				else if(months2.getValue().toString()=="February") {
+					ObservableList<Integer> day2Array = arrayOfNums(28);
+					day2Input.getItems().clear();
+					day2Input.getItems().addAll(day2Array);
+				}
+				else {
+					ObservableList<Integer> day2Array = arrayOfNums(30);
+					day2Input.getItems().clear();
+					day2Input.getItems().addAll(day2Array);
+				}
+					
+			}
+		});
+		
+		//day2Input.setPrefHeight(30);
+		//day2Input.setPrefWidth(85);
 
 		Label yearLabel2 = new Label("Year:");
 		yearLabel2.setStyle("-fx-font: 18 arial");
@@ -161,7 +211,7 @@ public class AddWindow{
 		HBox progressLayout = new HBox(10);
 		Label progressLabel = new Label("Progress:");
 		progressLabel.setStyle("-fx-font: 16 arial");
-		ComboBox progressInput = new ComboBox();
+		ComboBox<String> progressInput = new ComboBox<String>();
 		progressInput.getItems().addAll(
 				"Not Started",
 				"In progress",
@@ -214,46 +264,61 @@ public class AddWindow{
 			public void handle(ActionEvent event) {
 				newList = list; 
 				if(!(months1.getSelectionModel().isEmpty() || months2.getSelectionModel().isEmpty()  || year1Input.getText().trim().equals("")|| 
-						year2Input.getText().trim().equals("") || day1Input.getText().trim().equals("") || 
-						day2Input.getText().trim().equals("") || descriptionInput.getText().trim().equals("") || 
+						year2Input.getText().trim().equals("") || day1Input.getSelectionModel().isEmpty() || 
+						day2Input.getSelectionModel().isEmpty() || descriptionInput.getText().trim().equals("") || 
 						progressInput.getSelectionModel().isEmpty()))
 				{
 			
-					if(checkInt(day1Input) && checkInt(year1Input) && checkInt(year2Input) && checkInt(day2Input)) {
+					if( checkInt(year1Input) && checkInt(year2Input)) {
 					
 						if(index==-1) {
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
 							
-							
-							Task newTask = new Task(descriptionInput.getText(), GUI1ButtonsandListPane.displayedList.size()+1, monthIndex1, Integer.parseInt(day1Input.getText()),
-								     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
-						   GUI1ButtonsandListPane.displayedList.add(newTask);
-							
-							
+							Task newTask = new Task(descriptionInput.getText(), GUI1ButtonsandListPane.displayedList.size()+1, monthIndex1, day1Input.getValue(),
+								     Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
+							if(newTask.checkDate()) {
+							   GUI1ButtonsandListPane.displayedList.add(newTask);
+							   mainWindow.setScene(scene1);
+							}else{
+								System.out.println("Start date is after end date!");
+							}
 						}else {
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
 							
 							if(checkInt(priorityInput) && !priorityInput.getText().trim().equals("")) {
-							Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, Integer.parseInt(day1Input.getText()),
-								     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
-							GUI1ButtonsandListPane.displayedList.remove(index);
-							GUI1ButtonsandListPane.displayedList.add(Integer.parseInt(priorityInput.getText())-1, newTask);
-							if(Integer.parseInt(priorityInput.getText())!=index+1) {
-								for(int inc=index-1;inc<GUI1ButtonsandListPane.displayedList.size(); inc++) {
-									if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()!=inc+1) {
-										Task temp = GUI1ButtonsandListPane.displayedList.get(inc);
-										temp.setPriority(inc+1);
-										GUI1ButtonsandListPane.displayedList.remove(inc);
-										GUI1ButtonsandListPane.displayedList.add(inc, temp);
+								if(Integer.parseInt(priorityInput.getText())<=GUI1ButtonsandListPane.displayedList.size() && Integer.parseInt(priorityInput.getText())>0) {
+									Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, day1Input.getValue(),
+								    Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
+									if(newTask.checkDate()) {
+										GUI1ButtonsandListPane.displayedList.remove(index);
+										GUI1ButtonsandListPane.displayedList.add(Integer.parseInt(priorityInput.getText())-1, newTask);
+										
+										if(Integer.parseInt(priorityInput.getText())!=index+1) {
+											for(int inc=index-1;inc<GUI1ButtonsandListPane.displayedList.size(); inc++) {
+												if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()!=inc+1) {
+													Task temp = GUI1ButtonsandListPane.displayedList.get(inc);
+													temp.setPriority(inc+1);
+													GUI1ButtonsandListPane.displayedList.remove(inc);
+													GUI1ButtonsandListPane.displayedList.add(inc, temp);
+												}
+											}
+								
+										}
+										
+										mainWindow.setScene(scene1);
+									}else {
+										System.out.println("Start date is after end date!");
 									}
-								}
-							}
+								}else {
+									System.out.println("Priority out of bounds!");
+								 }
 							}
 						}
 					
-							mainWindow.setScene(scene1);
+							
+				
 					}else {
 						System.out.println("Please make sure correct fields are integers");
 					}
@@ -275,10 +340,10 @@ public class AddWindow{
 				return false;
 			}
 	}
-	private int[] arrayOfNums(int size){
-		int[] array = new int[size];
+	private ObservableList<Integer> arrayOfNums(int size){
+		ObservableList<Integer> array = FXCollections.observableArrayList();
 		for(int inc=0;inc<size;inc++) {
-			array[inc]= inc+1;
+			array.add(inc+1);
 		}
 		return array;
 	}
@@ -337,7 +402,7 @@ public class AddWindow{
 			result = 9;
 			
 		}
-		else if (month.equals("Ocotober"))
+		else if (month.equals("October"))
 		{
 			result = 10;
 		}
