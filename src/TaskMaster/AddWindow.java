@@ -206,32 +206,51 @@ public class AddWindow{
 				mainWindow.setScene(scene1);
 			}
 		});
-		if(index==-1) {
+		//if(index==-1) {
 		save.setOnAction(new EventHandler<ActionEvent>() { //Back button functionality
 			@Override
 			public void handle(ActionEvent event) {
 				newList = list; 
-				if(checkInt(day1Input) && checkInt(year1Input) && checkInt(year2Input) && checkInt(day2Input)) {
-					if(index==-1) {
-						int monthIndex1 = getMonthNum(months1);
-						int monthIndex2 = getMonthNum(months2);
-						
-						
-						Task newTask = new Task(descriptionInput.getText(), list.size()+1, monthIndex1, Integer.parseInt(day1Input.getText()),
-							     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
-					   newList.add(newTask);
-						
-						
+				if(!(months1.getSelectionModel().isEmpty() || months2.getSelectionModel().isEmpty()  || year1Input.getText().trim().equals("")|| 
+						year2Input.getText().trim().equals("") || day1Input.getText().trim().equals("") || 
+						day2Input.getText().trim().equals("") || descriptionInput.getText().trim().equals("") || 
+						progressInput.getSelectionModel().isEmpty()))
+				{
+			
+					if(checkInt(day1Input) && checkInt(year1Input) && checkInt(year2Input) && checkInt(day2Input)) {
+					
+						if(index==-1) {
+							int monthIndex1 = getMonthNum(months1);
+							int monthIndex2 = getMonthNum(months2);
+							
+							
+							Task newTask = new Task(descriptionInput.getText(), list.size()+1, monthIndex1, Integer.parseInt(day1Input.getText()),
+								     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
+						   GUI1ButtonsandListPane.displayedList.add(newTask);
+							
+							
+						}else {
+							int monthIndex1 = getMonthNum(months1);
+							int monthIndex2 = getMonthNum(months2);
+							
+							
+							Task newTask = new Task(descriptionInput.getText(), index+1, monthIndex1, Integer.parseInt(day1Input.getText()),
+								     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
+							GUI1ButtonsandListPane.displayedList.remove(index);
+							GUI1ButtonsandListPane.displayedList.add(index, newTask);
+						}
+					
+							mainWindow.setScene(scene1);
+					}else {
+						System.out.println("Please make sure correct fields are integers");
 					}
-				
-						mainWindow.setScene(scene1);
-				}else {
-					System.out.println("Please make sure correct fields are integers");
-				}
+				}else{
+					System.out.println("Please make sure all fields are filled");
 				
 			}
+			}
 		});
-		}
+		//}
 	}
 	
 	private boolean checkInt(TextField field) { //Checks if textfield entry is an integer 
