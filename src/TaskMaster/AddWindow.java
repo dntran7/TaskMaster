@@ -31,6 +31,7 @@ import javafx.event.EventHandler;	//**Need to import to handle event
 public class AddWindow{
 	private Scene addScene;
 	private TextField priorityInput;
+	private int priority;
 	private ArrayList<Task> newList;
 	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1, int index) {
 		VBox layout = new VBox(20);
@@ -58,14 +59,13 @@ public class AddWindow{
 		
    /**************Priority layout setup****************/
 		HBox prioLayout = new HBox(10);
-		if(index!=-1) {
 		Label priorityLabel = new Label("Priority:");
 		priorityLabel.setStyle("-fx-font: 24 arial");
 		TextField priorityInput = new TextField();
 		priorityInput.setPrefHeight(30);
 		priorityInput.setPrefWidth(85);
 		prioLayout.getChildren().addAll(priorityLabel, priorityInput);
-		}
+		
 	
 		//Start date label
 		Label startDate = new Label("Start date:");
@@ -142,6 +142,8 @@ public class AddWindow{
 		Label dayLabel2 = new Label("Day:");
 		dayLabel2.setStyle("-fx-font: 18 arial");
 		TextField day2Input = new TextField();
+		//int[] array = arrayOfNums(30);
+		//day2Input.getItems().addAll(array);
 		day2Input.setPrefHeight(30);
 		day2Input.setPrefWidth(85);
 
@@ -224,7 +226,7 @@ public class AddWindow{
 							int monthIndex2 = getMonthNum(months2);
 							
 							
-							Task newTask = new Task(descriptionInput.getText(), list.size()+1, monthIndex1, Integer.parseInt(day1Input.getText()),
+							Task newTask = new Task(descriptionInput.getText(), GUI1ButtonsandListPane.displayedList.size()+1, monthIndex1, Integer.parseInt(day1Input.getText()),
 								     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
 						   GUI1ButtonsandListPane.displayedList.add(newTask);
 							
@@ -233,11 +235,22 @@ public class AddWindow{
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
 							
-							
-							Task newTask = new Task(descriptionInput.getText(), index+1, monthIndex1, Integer.parseInt(day1Input.getText()),
+							if(checkInt(priorityInput) && !priorityInput.getText().trim().equals("")) {
+							Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, Integer.parseInt(day1Input.getText()),
 								     Integer.parseInt(year1Input.getText()), monthIndex2, Integer.parseInt(day2Input.getText()), Integer.parseInt(year2Input.getText()), "In progress");
 							GUI1ButtonsandListPane.displayedList.remove(index);
-							GUI1ButtonsandListPane.displayedList.add(index, newTask);
+							GUI1ButtonsandListPane.displayedList.add(Integer.parseInt(priorityInput.getText())-1, newTask);
+							if(Integer.parseInt(priorityInput.getText())!=index+1) {
+								for(int inc=index-1;inc<GUI1ButtonsandListPane.displayedList.size(); inc++) {
+									if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()!=inc+1) {
+										Task temp = GUI1ButtonsandListPane.displayedList.get(inc);
+										temp.setPriority(inc+1);
+										GUI1ButtonsandListPane.displayedList.remove(inc);
+										GUI1ButtonsandListPane.displayedList.add(inc, temp);
+									}
+								}
+							}
+							}
 						}
 					
 							mainWindow.setScene(scene1);
@@ -250,8 +263,8 @@ public class AddWindow{
 			}
 			}
 		});
-		//}
-	}
+		}
+	//}
 	
 	private boolean checkInt(TextField field) { //Checks if textfield entry is an integer 
 			
@@ -262,6 +275,13 @@ public class AddWindow{
 				return false;
 			}
 	}
+	private int[] arrayOfNums(int size){
+		int[] array = new int[size];
+		for(int inc=0;inc<size;inc++) {
+			array[inc]= inc+1;
+		}
+		return array;
+	}
 	public Scene getScene() {
 		return addScene;
 	}
@@ -269,7 +289,6 @@ public class AddWindow{
 	public ArrayList<Task> getNewList(){
 		return newList;
 	}
-	
 	private int getMonthNum(ComboBox monthBox)
 	{
 		int result = 0;

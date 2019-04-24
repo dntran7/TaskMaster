@@ -76,7 +76,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
 		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		displayedList = FXCollections.observableArrayList(taskList);
+		displayedList = FXCollections.observableList(taskList);
 		listView = new ListView<Task> (displayedList);
 		listView.setPrefWidth(400);
 		
@@ -173,7 +173,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		});
 	}
  public void setTaskList(ArrayList<Task> newList) {
-	 displayedList = FXCollections.observableArrayList(newList);
+	 displayedList = FXCollections.observableList(newList);
  }
  
  
