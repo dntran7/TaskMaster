@@ -25,6 +25,7 @@ import javafx.scene.layout.Pane;
 
 public class GUI1ButtonsandListPane extends HBox{
 	private ArrayList<Task> taskList;
+	public static ObservableList<Task> displayedList;
 	private ArrayList<Task> log;
 	private ListView<Task> listView;
 	private Button Add;
@@ -75,10 +76,12 @@ public class GUI1ButtonsandListPane extends HBox{
 		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
 		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		ObservableList<Task> aList = FXCollections.observableArrayList(taskList);
-		listView = new ListView<Task> (aList);
+		displayedList = FXCollections.observableArrayList(taskList);
+		listView = new ListView<Task> (displayedList);
 		listView.setPrefWidth(400);
+		
 		this.getChildren().addAll(buttonlist,listView);
+	
 	
 	}
 	
@@ -147,7 +150,7 @@ public class GUI1ButtonsandListPane extends HBox{
 					listView.getItems().remove(index);
 					taskList.get(index).setStatus("Completed");
 					//log.add(index,copy);
-
+					
 					taskList.get(index).setenDay(eday);
 					taskList.get(index).setenMonth(emonth);
 					taskList.get(index).setenYear(eyear);
@@ -164,9 +167,14 @@ public class GUI1ButtonsandListPane extends HBox{
 			@Override
 			public void handle(ActionEvent event) {
 				AddWindow addW = new AddWindow(taskList, stage, scene1, -1);
+				stage.setScene(addW.getScene());
+				//displayedList.add(addW.getNewList().get(2));
 			}
 		});
 	}
+ public void setTaskList(ArrayList<Task> newList) {
+	 displayedList = FXCollections.observableArrayList(newList);
+ }
  
  
  

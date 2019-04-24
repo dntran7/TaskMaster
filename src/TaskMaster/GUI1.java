@@ -28,7 +28,6 @@ public class GUI1 extends BorderPane{
 	private ArrayList<Task> taskList;
 	private ListView<Task> listView;
 	private GUI1ButtonsandListPane a;
-	
 	private Button print;
 	private Label error;
 	public GUI1(ArrayList<Task> list,Stage stage, Scene scene)
