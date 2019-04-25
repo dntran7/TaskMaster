@@ -129,7 +129,6 @@ public class GUI1ButtonsandListPane extends HBox{
 						Task copy = listView.getItems().get(index);
 						deletedTasks.add(copy);
 						listView.getItems().remove(index);
-						taskList.remove(index);
 						//System.out.println(taskList);
 						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
@@ -161,10 +160,6 @@ public class GUI1ButtonsandListPane extends HBox{
 					listView.getItems().remove(index);
 					//log.add(index,copy);
 
-					taskList.get(index).setenDay(eday);
-					taskList.get(index).setenMonth(emonth);
-					taskList.get(index).setenYear(eyear);
-					taskList.remove(index);
 
 					completedTasks.add(copy);
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
@@ -215,7 +210,8 @@ public class GUI1ButtonsandListPane extends HBox{
 			 tool = new sortingList(taskList,2);
 			 taskList = tool.returnSortedList();
 		     displayedList= FXCollections.observableList(taskList);
-			
+		     //System.out.println(displayedList.toString());
+			 listView.setItems(displayedList);
 			 break;
 		 case 3:
 			 tool = new sortingList(taskList,3);
@@ -237,7 +233,6 @@ public class GUI1ButtonsandListPane extends HBox{
 			 break;
 	 }
 	 setTaskList(taskList);
-	 listView.setItems(displayedList);
   
  }
  

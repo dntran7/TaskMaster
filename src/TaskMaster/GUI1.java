@@ -99,6 +99,7 @@ public class GUI1 extends BorderPane{
 		
 		this.setTop(top);
 		
+		priorityComboBox.setValue("Display by: Priority");
 		export = new Button("Export Save File");
 		export.setOnAction(new exportButton());
 		//Bottom part of the GUI

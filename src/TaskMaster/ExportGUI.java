@@ -93,8 +93,7 @@ public class ExportGUI {
     	vBox.getChildren().addAll(vBox_2,vBox_3,hBox);
     	Scene scene = new Scene(vBox, 800, 500);
     	
-    	mainWindow.setTitle("Export");
-    	mainWindow.setScene(scene);
+       	mainWindow.setScene(scene);
     	mainWindow.show();	
     	
     }

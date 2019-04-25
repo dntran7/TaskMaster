@@ -22,7 +22,6 @@ public class Export_confirmation extends Application{
 	}
 	public void start(Stage stage, String name, boolean exist) {
     	
-		stage.setTitle("Export");
     	bp   = new BorderPane();
 
     		title = new Label("your file \"" + name + ".txt\" has been exported");

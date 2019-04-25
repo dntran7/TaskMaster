@@ -248,7 +248,18 @@ public class AddWindow{
 		
 		
 		addScene = new Scene(layout, 800, 550);
-		
+		if(index!=-1) { //Set edit parameters to task values
+			Task temp= GUI1ButtonsandListPane.displayedList.get(index);
+			priorityInput.setText(Integer.toString(temp.getPriority()));
+			descriptionInput.setText(temp.getDescription());
+			months1.setValue(temp.convertString(temp.getstMonth()));
+			months2.setValue(temp.convertString(temp.getenMonth()));
+			day1Input.setValue(temp.getstDay());
+			day2Input.setValue(temp.getenDay());
+			year1Input.setText(Integer.toString(temp.getstYear()));
+			year2Input.setText(Integer.toString(temp.getenYear()));
+			progressInput.setValue(temp.getStatus());
+		}
 		
 		mainWindow.setScene(addScene); //Sets addScene to window
 		
@@ -296,19 +307,27 @@ public class AddWindow{
 												if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()<Integer.parseInt(priorityInput.getText())){
 													if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()<= Integer.parseInt(priorityInput.getText())
 													&& GUI1ButtonsandListPane.displayedList.get(inc).getPriority() > GUI1ButtonsandListPane.displayedList.get(index).getPriority()) {
-														GUI1ButtonsandListPane.displayedList.get(inc).setPriority(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()-1);
+														
+														Task temp1 = GUI1ButtonsandListPane.displayedList.get(inc);
+														temp1.setPriority(temp1.getPriority()-1);
+														GUI1ButtonsandListPane.displayedList.remove(inc);
+														GUI1ButtonsandListPane.displayedList.add(inc, temp1);
 													}
-												}else if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()>Integer.parseInt(priorityInput.getText())) {
+												}if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()>Integer.parseInt(priorityInput.getText())) {
 													if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()>= Integer.parseInt(priorityInput.getText())
 															&& GUI1ButtonsandListPane.displayedList.get(inc).getPriority() < GUI1ButtonsandListPane.displayedList.get(index).getPriority()) {
-																GUI1ButtonsandListPane.displayedList.get(inc).setPriority(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()+1);
+														Task temp1 = GUI1ButtonsandListPane.displayedList.get(inc);
+														temp1.setPriority(temp1.getPriority()+1);
+														GUI1ButtonsandListPane.displayedList.remove(inc);
+														GUI1ButtonsandListPane.displayedList.add(inc, temp1);
 													}
 												}
-												System.out.println(GUI1ButtonsandListPane.displayedList.toString());
+									
 											}
 											GUI1ButtonsandListPane.displayedList.remove(index);
 											GUI1ButtonsandListPane.displayedList.add(index, newTask);
-								
+										//	GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+											System.out.println(GUI1ButtonsandListPane.displayedList.toString());
 										//}
 										
 										mainWindow.setScene(scene1);
