@@ -1,11 +1,13 @@
+
 package TaskMaster;
 
+import java.util.Date;
 
 public class Task {
 	private String description;
 	private int priority;
-	private int startMonth, startDay, startYear;
-	private int endMonth,endDay, endYear;
+	private int stmonth, stday, styear, stdate;
+	private int enmonth, enday, enyear, endate;
 	private String status;
 	
 	
@@ -14,25 +16,27 @@ public class Task {
 		
 	}
 	
-	
-	public Task(String description, int prioirty, int stmonth, int stday, int styear, int endmonth, int endday, int endyear, String status)
+	public Task(String description, int prior, int stmonth, int stday, int styear, int endmonth, int endday, int endyear, String status)
 	{
 		this.description = description;
-		this.priority = priority;
+		this.priority = prior;
 
-		this.endMonth = endmonth;
-		this.endDay = endday;
-		this.endYear = endyear;
+		this.enmonth = endmonth;
+		this.enday = endday;
+		this.enyear = endyear;
+		String temp = Integer.toString(endyear)+Integer.toString(endmonth)+Integer.toString(endday);
+		this.endate = Integer.parseInt(temp);
 		
 
-		this.startMonth = stmonth;
-		this.startDay = stday;
-		this.startYear = styear;
+		this.stmonth = stmonth;
+		this.stday = stday;
+		this.styear = styear;
+		temp = Integer.toString(styear)+Integer.toString(stmonth)+Integer.toString(stday);
+		this.stdate = Integer.parseInt(temp);
 		
 		this.status = status;
 	}
-	
-	
+
 
 	public String getDescription() {
 		return description;
@@ -54,8 +58,63 @@ public class Task {
 	}
 
 
-	
+	public int getstMonth() {
+		return stmonth;
+	}
 
+
+	public void setstMonth(int stmonth) {
+		this.stmonth = stmonth;
+	}
+
+
+	public int getstDay() {
+		return stday;
+	}
+
+
+	public void setstDay(int stday) {
+		this.stday = stday;
+	}
+
+
+	public int getstYear() {
+		return styear;
+	}
+
+
+	public void setstYear(int year) {
+		this.styear = year;
+	}
+	
+	public int getenMonth() {
+		return enmonth;
+	}
+
+
+	public void setenMonth(int enmonth) {
+		this.enmonth = enmonth;
+	}
+
+
+	public int getenDay() {
+		return enday;
+	}
+
+
+	public void setenDay(int enday) {
+		this.enday = enday;
+	}
+
+
+	public int getenYear() {
+		return enyear;
+	}
+
+
+	public void setenYear(int year) {
+		this.enyear = year;
+	}
 
 	public String getStatus() {
 		return status;
@@ -65,104 +124,28 @@ public class Task {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
-
-
-	public int getStartMonth() {
-		return startMonth;
+	
+	public int getenDate() {
+		return endate;
+	}
+	
+	public int getstDate() {
+		return stdate;
 	}
 
-
-
-
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
-	}
-
-
-
-
-	public int getStartDay() {
-		return startDay;
-	}
-
-
-
-
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
-
-
-
-
-	public int getStartYear() {
-		return startYear;
-	}
-
-
-
-
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
-	}
-
-
-
-
-	public int getEndMonth() {
-		return endMonth;
-	}
-
-
-
-
-	public void setEndMonth(int endMonth) {
-		this.endMonth = endMonth;
-	}
-
-
-
-
-	public int getEndDay() {
-		return endDay;
-	}
-
-
-
-
-	public void setEndDay(int endDay) {
-		this.endDay = endDay;
-	}
-
-
-
-
-	public int getEndYear() {
-		return endYear;
-	}
-
-
-
-
-	public void setEndYear(int endYear) {
-		this.endYear = endYear;
-	}
 	
 	public String toString()
 	{
 		String a ="";
-		a+="Description:\t\t" +getDescription()+"\n";
-		a+="Priority:\t\t\t" +getPriority()+"\n";
-		a+="Start Date:\t\t" +getStartMonth()+"/" +getStartDay()+"/" +getStartYear()+"\n";
+		a+="Description:\t\t" +getDescription()+"\r\n";
+		a+="Priority:\t\t\t" +getPriority()+"\r\n";
+		a+="Start Date:\t\t" +getstMonth()+"/" +getstDay()+"/" +getstYear()+"\r\n";
 
-		a+="End Date:\t\t\t" +getEndMonth()+"/" +getEndDay()+"/" +getEndYear()+"\n";
+		a+="End Date:\t\t\t" +getenMonth()+"/" +getenDay()+"/" +getenYear()+"\r\n";
 
-		a+="Status:\t\t\t" +status+"\n";
+		a+="Status:\t\t\t" +status+"\r\n";
 		
+		//return "KOPKO";
 		return a;
 	}
-	
-
 }
