@@ -200,11 +200,11 @@ public class Task {
 	public String toString()
 	{
 		String a ="";
-		a+="Description:\t\t" +getDescription()+"\n";
-		a+="Priority:\t\t\t" +getPriority()+"\n";
-		a+="Start Date:\t\t" +getstMonth()+"/" +getstDay()+"/" +getstYear()+"\n";
+		a+="Description:\t\t" +getDescription()+"\r\n";
+		a+="Priority:\t\t\t" +getPriority()+"\r\n";
+		a+="Start Date:\t\t" +getstMonth()+"/" +getstDay()+"/" +getstYear()+"\r\n";
 
-		a+="End Date:\t\t\t" +getenMonth()+"/" +getenDay()+"/" +getenYear()+"\n";
+		a+="End Date:\t\t\t" +getenMonth()+"/" +getenDay()+"/" +getenYear()+"\r\n";
 
 		a+="Status:\t\t\t" +status+"\n";
 		

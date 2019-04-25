@@ -13,6 +13,7 @@ public class TaskMaster extends Application
     private GUI1 a;
     private ArrayList<Task> taskList;
     private ArrayList<Task> record;
+    private ArrayList<Task> tasklist, completedList;
 
     public void start(Stage stage)
     {
@@ -21,7 +22,8 @@ public class TaskMaster extends Application
         //movieList to be used in both createPane & reviewPane
         taskList = new ArrayList<Task>();
         Scene scene = new Scene(root, 800, 550);
-        a = new GUI1(taskList, stage, scene);
+        completedList = new ArrayList<Task>();
+        a = new GUI1(taskList, completedList,stage, scene);
         root.getChildren().add(a);
 
         stage.setTitle("TaskMaster");

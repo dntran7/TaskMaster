@@ -41,6 +41,7 @@ import javafx.geometry.Pos;
 
 public class GUI1 extends BorderPane{
 	private ArrayList<Task> taskList;
+	private ArrayList<Task> completedList;
 	private ListView<Task> listView;
 	private GUI1ButtonsandListPane a;
 	final ComboBox<String> priorityComboBox;
@@ -50,10 +51,15 @@ public class GUI1 extends BorderPane{
 	private TextField b;
 	Stage st;
 	Scene sc;
-	public GUI1(ArrayList<Task> list,Stage stage, Scene scene)
+	public GUI1(ArrayList<Task> list,ArrayList<Task> completedList, Stage stage, Scene scene)
 	{
 		this.taskList = list;
-		a = new GUI1ButtonsandListPane(taskList,stage,scene);
+		this.completedList = completedList;
+		error = new Label();
+		
+		error.setText("");
+		error.setTextFill(Color.RED);
+		a = new GUI1ButtonsandListPane(this.taskList,this.completedList,stage,scene);
 		this.setCenter(a);
 		
 		//Top part of the GUI
@@ -94,12 +100,11 @@ public class GUI1 extends BorderPane{
         );   
         
 		priorityComboBox.setOnAction(new sortComboBox());//connect lsitener so that you can sort the list
-
+		priorityComboBox.setValue("Display by: Priority");
 		top.setRight(priorityComboBox);
 		
 		this.setTop(top);
 		
-		priorityComboBox.setValue("Display by: Priority");
 		export = new Button("Export Save File");
 		export.setOnAction(new exportButton());
 		//Bottom part of the GUI
@@ -109,14 +114,15 @@ public class GUI1 extends BorderPane{
 		print.setOnAction((e)->
 		{
 			ExportGUI export = new ExportGUI();
+			
+			for (int i = 0; i < a.getCompletedTaskList().size(); i++)
+			{
+				String desc = a.getCompletedTaskList().get(i).getDescription();
+				System.out.println(desc);
+			}
 			export.ExportGUI(a.getTaskList(),a.getCompletedTaskList(), stage, scene);
 		});
 		
-		
-		error = new Label();
-		
-		error.setText("Error message is here");
-		error.setTextFill(Color.RED);
 
 		TilePane temp = new TilePane();
 		temp.getChildren().addAll(export,print);
@@ -124,7 +130,6 @@ public class GUI1 extends BorderPane{
 		bottom.setPadding(new Insets(15));
 		bottom.setRight(temp);
 		bottom.setLeft(error);
-		
 		
 		this.setBottom(bottom);
 		
@@ -209,7 +214,12 @@ public class GUI1 extends BorderPane{
 					 if(loaded!=null)
 					 {
 						 taskList = loaded;
-						 a = new GUI1ButtonsandListPane(taskList,st,sc);
+						 System.out.println(loaded);
+						/* ArrayList<Task> completedList = new ArrayList<Task>();
+						 a = new GUI1ButtonsandListPane(taskList,completedList,st,sc);*/
+						 a.displayedList = FXCollections.observableArrayList(taskList);
+						 a.listView.setItems(a.displayedList);
+						 error.setText("successfully loaded file");
 					 }
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -234,7 +244,8 @@ public class GUI1 extends BorderPane{
 			dialog.setContentText("Name:");
 			 
 			Optional<String> result = dialog.showAndWait();
-			System.out.println(result.get());
+			if(result!=null)
+			{System.out.println(result.get());}
 			ArrayList<Task> savingList = a.getTaskList();
 			String savingString =savingList.size()+"\n";
 			for(int i =0;i<savingList.size();i++)
@@ -277,5 +288,4 @@ public class GUI1 extends BorderPane{
 			}
 					
 		}
-
 }

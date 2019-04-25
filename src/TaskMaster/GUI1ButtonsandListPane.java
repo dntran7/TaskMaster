@@ -24,6 +24,8 @@ import java.time.temporal.ChronoUnit;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class GUI1ButtonsandListPane extends HBox{
 	private ArrayList<Task> taskList;
@@ -36,6 +38,7 @@ public class GUI1ButtonsandListPane extends HBox{
 	private Button Delete;
 	private Button Change;
 	private Button Complete;
+	private Label error = new Label();
 	public ArrayList<Task> getTaskList()
 	{
 		return taskList;
@@ -45,7 +48,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		return completedTasks;
 	}
 
-	public GUI1ButtonsandListPane(ArrayList<Task> list,Stage stage, Scene scene)
+	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
 	{
 		this.taskList = list;
 		VBox buttonlist = new VBox();
@@ -53,7 +56,9 @@ public class GUI1ButtonsandListPane extends HBox{
 		Delete = new Button("Delete");
 		Change = new Button("Change");
 		Complete = new Button("Complete");
-
+		error.setText("");
+		error.setTextFill(Color.RED);
+		completedTasks = completed;
 		Add.setPrefWidth(400);
 		Delete.setPrefWidth(400);
 		Change.setPrefWidth(400);
@@ -85,7 +90,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		completePane.getChildren().add(Complete);
 		
 		
-		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
+		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane,error);
 		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
 		taskList.add(new Task( "aest", 2, 22, 23, 1992,0,0,0, "sd"));
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
@@ -111,7 +116,7 @@ public class GUI1ButtonsandListPane extends HBox{
 					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
 					else {
-						
+						error.setText("ERROR: an entry must be selected for changing");
 					}
 			}
 		});
@@ -133,6 +138,9 @@ public class GUI1ButtonsandListPane extends HBox{
 						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
 					}
+					else {
+						error.setText("ERROR: an entry must be selected for deletion");
+					}
 		}
 		}
 
@@ -145,7 +153,9 @@ public class GUI1ButtonsandListPane extends HBox{
 		// TODO Auto-generated method stub
 				int index = (listView.getSelectionModel().getSelectedIndex());
 				if(index>=0)
-				{	listView.getItems().get(index).setStatus("Completed");
+				{	
+					Task temp = listView.getItems().get(index);
+					listView.getItems().get(index).setStatus("Completed");
 				Date date = new Date();
 				LocalDate cal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				int eyear = cal.getYear();
@@ -154,15 +164,31 @@ public class GUI1ButtonsandListPane extends HBox{
 					listView.getItems().get(index).setenDay(eday);
 					listView.getItems().get(index).setenMonth(emonth);
 					listView.getItems().get(index).setenYear(eyear);
+					
 				//get completed dates
-					taskList.get(index).setStatus("Completed");
+				
 					Task copy = listView.getItems().get(index);
 					listView.getItems().remove(index);
 					//log.add(index,copy);
+					Task complete = new Task();
+					complete.setDescription(temp.getDescription());
+					complete.setenDay(temp.getenDate());
+					complete.setstDay(temp.getstDate());
+					complete.setenMonth(temp.getenMonth());
+					complete.setstMonth(temp.getstMonth());
+					complete.setenYear(temp.getenYear());
+					complete.setstYear(temp.getstYear());
+					complete.setPriority(temp.getPriority());
+					complete.setStatus(temp.getStatus());
+				//	taskList.remove(index);						taskList.remove(index);
 
 
-					completedTasks.add(copy);
+ 					completedTasks.add(complete);
+
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+				}
+				else {
+					error.setText("ERROR: an entry must be selected for completion");
 				}
 
 	}
