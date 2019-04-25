@@ -87,9 +87,9 @@ public class GUI1ButtonsandListPane extends HBox{
 		
 		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
 		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		taskList.add(new Task( "aest", 3, 22, 23, 1992,0,0,0, "sd"));
+		taskList.add(new Task( "aest", 2, 22, 23, 1992,0,0,0, "sd"));
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		displayedList = FXCollections.observableArrayList(taskList);
+		displayedList = FXCollections.observableList(taskList);
 		listView = new ListView<Task> (displayedList);
 		listView.setPrefWidth(400);
 		
@@ -107,6 +107,7 @@ public class GUI1ButtonsandListPane extends HBox{
 					int index = (listView.getSelectionModel().getSelectedIndex());
 					if(index>=0)
 					{
+						//sortTaskList(1);
 					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
 					else {
@@ -179,6 +180,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				//sortTaskList(1);
 				AddWindow addW = new AddWindow(taskList, stage, scene1, -1);
 				stage.setScene(addW.getScene());
 				//displayedList.add(addW.getNewList().get(2));
@@ -186,7 +188,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		});
 	}
  public void setTaskList(ArrayList<Task> newList) {
-	 displayedList = FXCollections.observableArrayList(newList);
+	 displayedList = FXCollections.observableList(newList);
     /* listView = new ListView<Task> (displayedList);
      listView.refresh();
      listView.setFocusTraversable(true);*/
@@ -206,34 +208,36 @@ public class GUI1ButtonsandListPane extends HBox{
 		 case 1:
 			 tool = new sortingList(taskList,1);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
 			 listView.setItems(displayedList);
 			 break;
 		 case 2:
 			 tool = new sortingList(taskList,2);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
-			 listView.setItems(displayedList);
+		     displayedList= FXCollections.observableList(taskList);
+			
 			 break;
 		 case 3:
 			 tool = new sortingList(taskList,3);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
 			 listView.setItems(displayedList);
 			 break;
 		 case 4:
 			 tool = new sortingList(taskList,4);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
+			 listView.setItems(displayedList);
 			 break;
 		 case 5:
 			 tool = new sortingList(taskList,5);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
 			 listView.setItems(displayedList);
 			 break;
 	 }
 	 setTaskList(taskList);
+	 listView.setItems(displayedList);
   
  }
  

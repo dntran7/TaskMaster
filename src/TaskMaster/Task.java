@@ -24,16 +24,43 @@ public class Task {
 		this.enmonth = endmonth;
 		this.enday = endday;
 		this.enyear = endyear;
-		String temp = Integer.toString(endyear)+Integer.toString(endmonth)+Integer.toString(endday);
+		String endmonthString;
+		if(endmonth<10) {
+			endmonthString = "0"+Integer.toString(endmonth);
+		}
+		else {
+			endmonthString = Integer.toString(endmonth);
+		}
+		String enddayString;
+		if(endday<10) {
+			enddayString = "0"+Integer.toString(endday);
+		}
+		else {
+			enddayString = Integer.toString(endday);
+		}
+		String temp = Integer.toString(endyear)+endmonthString+enddayString;
 		this.endate = Integer.parseInt(temp);
 		
 
 		this.stmonth = stmonth;
 		this.stday = stday;
 		this.styear = styear;
-		temp = Integer.toString(styear)+Integer.toString(stmonth)+Integer.toString(stday);
+		String stmonthString;
+		if(stmonth<10) {
+			stmonthString = "0"+Integer.toString(stmonth);
+		}
+		else {
+			stmonthString = Integer.toString(stmonth);
+		}
+		String stdayString;
+		if(stday<10) {
+			stdayString = "0"+Integer.toString(stday);
+		}
+		else {
+			stdayString = Integer.toString(stday);
+		}
+		temp = Integer.toString(styear)+stmonthString+stdayString;
 		this.stdate = Integer.parseInt(temp);
-		
 		this.status = status;
 	}
 
@@ -133,7 +160,13 @@ public class Task {
 		return stdate;
 	}
 
-	
+	public boolean checkDate() {
+		if (stdate<=endate){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public String toString()
 	{
 		String a ="";
