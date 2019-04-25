@@ -1,12 +1,14 @@
 package TaskMaster;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.Event;
@@ -20,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+
+//import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
+
 import java.time.temporal.ChronoUnit;
 
 import javafx.scene.layout.HBox;
@@ -27,27 +32,32 @@ import javafx.scene.layout.Pane;
 
 public class GUI1ButtonsandListPane extends HBox{
 	private ArrayList<Task> taskList;
-	private static ArrayList<Task> completedTasks = new ArrayList<Task>();
-	private static ArrayList<Task> deletedTasks = new ArrayList<Task>();
+	private ArrayList<Task> completedTasks;
+	public static ArrayList<Task> deletedTasks = new ArrayList<Task>();
 	public static ObservableList<Task> displayedList;
 	String taskLog = "";
 	public static ListView<Task> listView;
 	private Button Add;
 	private Button Delete;
 	private Button Change;
+	private Label error = new Label();
+	
 	private Button Complete;
 	public ArrayList<Task> getTaskList()
 	{
-		return taskList;
+		return this.taskList;
 	}
 	public ArrayList<Task> getCompletedTaskList()
 	{
-		return completedTasks;
+		return this.completedTasks;
 	}
 
-	public GUI1ButtonsandListPane(ArrayList<Task> list,Stage stage, Scene scene)
+	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
 	{
+		error.setText("");
+		error.setTextFill(Color.RED);
 		this.taskList = list;
+		this.completedTasks = completed;
 		VBox buttonlist = new VBox();
 		Add = new Button("Add");
 		Delete = new Button("Delete");
@@ -85,7 +95,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		completePane.getChildren().add(Complete);
 		
 		
-		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
+		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane,error);
 		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
 		taskList.add(new Task( "aest", 3, 22, 23, 1992,0,0,0, "sd"));
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
@@ -110,7 +120,7 @@ public class GUI1ButtonsandListPane extends HBox{
 					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
 					else {
-						
+							error.setText("ERROR: an entry must be selected for changing");
 					}
 			}
 		});
@@ -133,6 +143,10 @@ public class GUI1ButtonsandListPane extends HBox{
 						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
 					}
+					else
+					{
+						error.setText("ERROR: an entry must be selected for deletion");
+					}
 		}
 		}
 
@@ -143,30 +157,50 @@ public class GUI1ButtonsandListPane extends HBox{
 	@Override
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
+		
+				
 				int index = (listView.getSelectionModel().getSelectedIndex());
 				if(index>=0)
-				{	listView.getItems().get(index).setStatus("Completed");
-				Date date = new Date();
-				LocalDate cal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				int eyear = cal.getYear();
-				int emonth = cal.getMonthValue();
-				int eday = cal.getDayOfMonth();
+				{	
+					Task temp = listView.getItems().get(index);
+					listView.getItems().get(index).setStatus("Completed");
+					Date date = new Date();
+					LocalDate cal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					int eyear = cal.getYear();
+					int emonth = cal.getMonthValue();
+					int eday = cal.getDayOfMonth();
 					listView.getItems().get(index).setenDay(eday);
 					listView.getItems().get(index).setenMonth(emonth);
 					listView.getItems().get(index).setenYear(eyear);
-				//get completed dates
+					//get completed dates
 					taskList.get(index).setStatus("Completed");
 					Task copy = listView.getItems().get(index);
 					listView.getItems().remove(index);
-					//log.add(index,copy);
-
+					
 					taskList.get(index).setenDay(eday);
 					taskList.get(index).setenMonth(emonth);
 					taskList.get(index).setenYear(eyear);
+					
+					Task complete = new Task();
+					complete.setDescription(temp.getDescription());
+					complete.setenDay(temp.getenDate());
+					complete.setstDay(temp.getstDate());
+					complete.setenMonth(temp.getenMonth());
+					complete.setstMonth(temp.getstMonth());
+					complete.setenYear(temp.getenYear());
+					complete.setstYear(temp.getstYear());
+					complete.setPriority(temp.getPriority());
+					complete.setStatus(temp.getStatus());
 					taskList.remove(index);
-
-					completedTasks.add(copy);
+					
+					
+					
+					completedTasks.add(complete);
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+				}
+				else
+				{
+					error.setText("ERROR: an entry must be selected for completing");
 				}
 
 	}
