@@ -47,6 +47,9 @@ public class GUI1ButtonsandListPane extends HBox{
 	{
 		return completedTasks;
 	}
+	public ArrayList<Task> getDeletedTaskList(){
+		return deletedTasks;
+	}
 
 	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
 	{

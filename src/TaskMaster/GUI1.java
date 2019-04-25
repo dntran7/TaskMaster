@@ -120,7 +120,7 @@ public class GUI1 extends BorderPane{
 				String desc = a.getCompletedTaskList().get(i).getDescription();
 				System.out.println(desc);
 			}
-			export.ExportGUI(a.getTaskList(),a.getCompletedTaskList(), stage, scene);
+			export.ExportGUI(a.getTaskList(),a.getCompletedTaskList(), a.getDeletedTaskList(),stage, scene);
 		});
 		
 
@@ -246,7 +246,7 @@ public class GUI1 extends BorderPane{
 			Optional<String> result = dialog.showAndWait();
 			if(result!=null)
 			{System.out.println(result.get());}
-			ArrayList<Task> savingList = a.getTaskList();
+			ObservableList<Task> savingList = a.listView.getItems();
 			String savingString =savingList.size()+"\n";
 			for(int i =0;i<savingList.size();i++)
 			{
