@@ -46,7 +46,7 @@ public class ExportGUI {
 	  }
 	
     
-	public void ExportGUI(ArrayList<Task> list, ArrayList<Task> completedList, Stage mainWindow, Scene scene1) {
+	public void ExportGUI(ArrayList<Task> list, ArrayList<Task> completedList,ArrayList<Task> deletedList, Stage mainWindow, Scene scene1) {
     	
     	vBox     = new VBox();
     	vBox_2   = new VBox();
@@ -88,7 +88,14 @@ public class ExportGUI {
         compList.setPrefHeight(350);
         /********************************************/
    
-        
+        //deleted Area
+        String DeletedList = "";
+        for(int x = 0;x<deletedList.size();x++)
+        {
+        	DeletedList +=deletedList.get(x).toString() + "\r\n\r\n";
+        }
+ 
+        /********************************************/
         
     	saveButton = new Button("SAVE");
     	
@@ -98,9 +105,13 @@ public class ExportGUI {
           final String result = "Not Completed List:\r\n"
         		  + tempNotCompletedList
         		  + "\r\n_________________________________________________________\r\nCompleted List:\r\n"
-        		  + CompletedList ;
+        		  + CompletedList 
+          		  + "\r\n_________________________________________________________\r\nDeleted List:\r\n"
+          		  + deletedList ;
           
-                      
+          Text textSong = TextBuilder.create()
+                  .text(result)
+                  .build();                
            
     	
     	saveButton.setOnAction((e)->//set the an action for when the user clicks on the save button
@@ -146,8 +157,4 @@ public class ExportGUI {
     	
     }
 
-
-
 }
-
-

@@ -20,18 +20,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-
-import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
-
 import java.time.temporal.ChronoUnit;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class GUI1ButtonsandListPane extends HBox{
 	private ArrayList<Task> taskList;
-	private ArrayList<Task> completedTasks;
-	public static ArrayList<Task> deletedTasks = new ArrayList<Task>();
+	private static ArrayList<Task> completedTasks = new ArrayList<Task>();
+	private static ArrayList<Task> deletedTasks = new ArrayList<Task>();
 	public static ObservableList<Task> displayedList;
 	String taskLog = "";
 	public static ListView<Task> listView;
@@ -39,25 +38,30 @@ public class GUI1ButtonsandListPane extends HBox{
 	private Button Delete;
 	private Button Change;
 	private Button Complete;
+	private Label error = new Label();
 	public ArrayList<Task> getTaskList()
 	{
-		return this.taskList;
+		return taskList;
 	}
 	public ArrayList<Task> getCompletedTaskList()
 	{
-		return this.completedTasks;
+		return completedTasks;
+	}
+	public ArrayList<Task> getDeletedTaskList(){
+		return deletedTasks;
 	}
 
 	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
 	{
 		this.taskList = list;
-		this.completedTasks = completed;
 		VBox buttonlist = new VBox();
 		Add = new Button("Add");
 		Delete = new Button("Delete");
 		Change = new Button("Change");
 		Complete = new Button("Complete");
-
+		error.setText("");
+		error.setTextFill(Color.RED);
+		completedTasks = completed;
 		Add.setPrefWidth(400);
 		Delete.setPrefWidth(400);
 		Change.setPrefWidth(400);
@@ -89,13 +93,13 @@ public class GUI1ButtonsandListPane extends HBox{
 		completePane.getChildren().add(Complete);
 		
 		
-		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane);
+		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane,error);
 		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		taskList.add(new Task( "aest", 3, 22, 23, 1992,0,0,0, "sd"));
+		taskList.add(new Task( "aest", 2, 22, 23, 1992,0,0,0, "sd"));
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		displayedList = FXCollections.observableArrayList(taskList);
+		displayedList = FXCollections.observableList(taskList);
 		listView = new ListView<Task> (displayedList);
-		listView.setPrefWidth(400) ;
+		listView.setPrefWidth(400);
 		
 		this.getChildren().addAll(buttonlist,listView);
 	
@@ -111,10 +115,11 @@ public class GUI1ButtonsandListPane extends HBox{
 					int index = (listView.getSelectionModel().getSelectedIndex());
 					if(index>=0)
 					{
+						//sortTaskList(1);
 					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
 					else {
-						
+						error.setText("ERROR: an entry must be selected for changing");
 					}
 			}
 		});
@@ -132,10 +137,12 @@ public class GUI1ButtonsandListPane extends HBox{
 						Task copy = listView.getItems().get(index);
 						deletedTasks.add(copy);
 						listView.getItems().remove(index);
-						taskList.remove(index);
 						//System.out.println(taskList);
 						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
+					}
+					else {
+						error.setText("ERROR: an entry must be selected for deletion");
 					}
 		}
 		}
@@ -147,30 +154,25 @@ public class GUI1ButtonsandListPane extends HBox{
 	@Override
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
-		
-				
 				int index = (listView.getSelectionModel().getSelectedIndex());
 				if(index>=0)
 				{	
 					Task temp = listView.getItems().get(index);
 					listView.getItems().get(index).setStatus("Completed");
-					Date date = new Date();
-					LocalDate cal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					int eyear = cal.getYear();
-					int emonth = cal.getMonthValue();
-					int eday = cal.getDayOfMonth();
+				Date date = new Date();
+				LocalDate cal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				int eyear = cal.getYear();
+				int emonth = cal.getMonthValue();
+				int eday = cal.getDayOfMonth();
 					listView.getItems().get(index).setenDay(eday);
 					listView.getItems().get(index).setenMonth(emonth);
 					listView.getItems().get(index).setenYear(eyear);
-					//get completed dates
-					taskList.get(index).setStatus("Completed");
+					
+				//get completed dates
+				
 					Task copy = listView.getItems().get(index);
 					listView.getItems().remove(index);
-					
-					taskList.get(index).setenDay(eday);
-					taskList.get(index).setenMonth(emonth);
-					taskList.get(index).setenYear(eyear);
-					
+					//log.add(index,copy);
 					Task complete = new Task();
 					complete.setDescription(temp.getDescription());
 					complete.setenDay(temp.getenDate());
@@ -181,12 +183,15 @@ public class GUI1ButtonsandListPane extends HBox{
 					complete.setstYear(temp.getstYear());
 					complete.setPriority(temp.getPriority());
 					complete.setStatus(temp.getStatus());
-					taskList.remove(index);
-					
-					
-					
-					completedTasks.add(complete);
+				//	taskList.remove(index);						taskList.remove(index);
+
+
+ 					completedTasks.add(complete);
+
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+				}
+				else {
+					error.setText("ERROR: an entry must be selected for completion");
 				}
 
 	}
@@ -199,6 +204,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				//sortTaskList(1);
 				AddWindow addW = new AddWindow(taskList, stage, scene1, -1);
 				stage.setScene(addW.getScene());
 				//displayedList.add(addW.getNewList().get(2));
@@ -206,7 +212,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		});
 	}
  public void setTaskList(ArrayList<Task> newList) {
-	 displayedList = FXCollections.observableArrayList(newList);
+	 displayedList = FXCollections.observableList(newList);
     /* listView = new ListView<Task> (displayedList);
      listView.refresh();
      listView.setFocusTraversable(true);*/
@@ -226,30 +232,32 @@ public class GUI1ButtonsandListPane extends HBox{
 		 case 1:
 			 tool = new sortingList(taskList,1);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
 			 listView.setItems(displayedList);
 			 break;
 		 case 2:
 			 tool = new sortingList(taskList,2);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+		     displayedList= FXCollections.observableList(taskList);
+		     //System.out.println(displayedList.toString());
 			 listView.setItems(displayedList);
 			 break;
 		 case 3:
 			 tool = new sortingList(taskList,3);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
 			 listView.setItems(displayedList);
 			 break;
 		 case 4:
 			 tool = new sortingList(taskList,4);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
+			 listView.setItems(displayedList);
 			 break;
 		 case 5:
 			 tool = new sortingList(taskList,5);
 			 taskList = tool.returnSortedList();
-			 displayedList = FXCollections.observableArrayList(taskList);
+			 displayedList = FXCollections.observableList(taskList);
 			 listView.setItems(displayedList);
 			 break;
 	 }
