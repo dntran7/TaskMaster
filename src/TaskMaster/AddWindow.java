@@ -8,6 +8,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.geometry.*;
@@ -22,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.EventHandler;	//**Need to import to handle event
 
@@ -32,6 +34,7 @@ public class AddWindow{
 	private Scene addScene;
 	private TextField priorityInput;
 	private ArrayList<Task> newList;
+	
 	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1, int index) {
 		VBox layout = new VBox(20);
 		
@@ -108,6 +111,12 @@ public class AddWindow{
 		year1Input.setPrefHeight(30);
 		year1Input.setPrefWidth(85);
 		date1Layout.getChildren().addAll(monthLabel1,months1, dayLabel1, day1Input, yearLabel1, year1Input);
+		
+		
+		
+		
+		
+		
 
 		
 		
@@ -193,6 +202,21 @@ public class AddWindow{
 			layout.getChildren().addAll(grid, descriptionInput);
 		}
 		layout.getChildren().addAll(startDate, date1Layout, endDate, date2Layout, progressLayout, buttonLayout); //Sets main vbox layout
+		
+		/*
+		 * Error label
+		 */
+		
+		Label error = new Label();
+		error.setText("Error message is here");
+		error.setTextFill(Color.RED);
+		
+		BorderPane bottom = new BorderPane();
+		bottom.setPadding(new Insets(15));
+		
+		bottom.setCenter(error);
+		
+		layout.getChildren().add(bottom);
 		
 		
 		addScene = new Scene(layout, 800, 550);

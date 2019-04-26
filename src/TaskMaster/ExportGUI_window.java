@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class ExportGUI_window extends Application{
@@ -44,6 +45,9 @@ public class ExportGUI_window extends Application{
     	save.setOnAction((e)->
     	{
 	    	try {
+	    		
+	    		
+	                
 	 
 				FileWriter writer = new FileWriter(file.getText(), true);
 				

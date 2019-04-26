@@ -100,9 +100,7 @@ public class ExportGUI {
         		  + "\r\n_________________________________________________________\r\nCompleted List:\r\n"
         		  + CompletedList ;
           
-          Text textSong = TextBuilder.create()
-                  .text(result)
-                  .build();                
+                      
            
     	
     	saveButton.setOnAction((e)->//set the an action for when the user clicks on the save button

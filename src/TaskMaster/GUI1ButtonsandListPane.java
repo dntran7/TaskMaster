@@ -95,7 +95,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
 		displayedList = FXCollections.observableArrayList(taskList);
 		listView = new ListView<Task> (displayedList);
-		listView.setPrefWidth(400);
+		listView.setPrefWidth(400) ;
 		
 		this.getChildren().addAll(buttonlist,listView);
 	

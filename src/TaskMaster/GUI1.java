@@ -13,6 +13,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,6 +34,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.EventHandler;	//**Need to import to handle event
@@ -51,6 +53,25 @@ public class GUI1 extends BorderPane{
 	private TextField b;
 	Stage st;
 	Scene sc;
+	
+	
+	
+	
+	  private void SaveFile(String content, File file){
+	        try {
+	            FileWriter fileWriter = null;
+	             
+	            fileWriter = new FileWriter(file);
+	            fileWriter.write(content);
+	            fileWriter.close();
+	        } catch (IOException ex) {
+	            
+	        }
+	         
+	  }
+	  
+
+	  
 	public GUI1(ArrayList<Task> list,ArrayList<Task> completedList, Stage stage, Scene scene)
 	{
 		this.taskList = list;
@@ -102,10 +123,67 @@ public class GUI1 extends BorderPane{
 		this.setTop(top);
 		
 		export = new Button("Export Save File");
-		export.setOnAction(new exportButton());
+		//export.setOnAction(new exportButton());
+		
+		
+		
+	
+		export.setOnAction((e)->
+		{
+			
+			
+			
+			 int numberofTasks = taskList.size();
+			 
+			 String result = numberofTasks + "\r\n";
+			 
+			 
+			 
+			 for(int i = 0; i<numberofTasks;i++)
+			 {
+				 Task task = taskList.get(i);
+				 String desc = task.getDescription();
+				 int prior = task.getPriority();
+				 String status = task.getStatus();
+				 int stMonth = task.getstMonth();
+				 int stDay = task.getstDay();
+				 int stYear = task.getstYear();
+
+				 int enMonth = task.getenMonth();
+				 int enDay = task.getenDay();
+				 int enYear = task.getenYear();
+				 
+				 
+				 result += desc + "\r\n" + prior +  "\r\n" + status + "\r\n" + stMonth + "\r\n" + stDay + 
+						 "\r\n" + stYear + "\r\n" + enMonth + "\r\n" +enDay+ "\r\n" + enYear + "\r\n";
+			 }
+			
+			
+			FileChooser fileChooser = new FileChooser();
+			
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+	        fileChooser.getExtensionFilters().add(extFilter);
+	        
+	        //Show save file dialog
+	        File file = fileChooser.showSaveDialog(stage);
+	        
+	        if(file != null){
+	            SaveFile(result, file);
+	        }
+	            
+			
+			
+			
+		});
+		
 		//Bottom part of the GUI
 		print = new Button("Print Report");
 		
+		
+		
+		
+		
+	
 		
 		print.setOnAction((e)->
 		{
@@ -145,6 +223,9 @@ public class GUI1 extends BorderPane{
 		
 		  
 	}
+	
+	
+	
 	private class sortComboBox implements EventHandler<ActionEvent> 
 	{
 		@Override
@@ -190,12 +271,50 @@ public class GUI1 extends BorderPane{
 		public void handle(ActionEvent event) {
 			// TODO Auto-generated method stub
 			String filename = b.getText();
-			if(filename!="")
+			
+			
+			FileChooser fileChooser = new FileChooser();
+
+			
+			FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+			fileChooser.getExtensionFilters().add(extentionFilter);
+
+			//Set to user directory or go to default if cannot access
+			String userDirectoryString = System.getProperty("user.home");
+			File userDirectory = new File(userDirectoryString);
+			if(!userDirectory.canRead()) {
+			    userDirectory = new File("c:/");
+			}
+			fileChooser.setInitialDirectory(userDirectory);
+
+			//Choose the file
+			File chosenFile = fileChooser.showOpenDialog(null);
+			//Make sure a file was selected, if not return default
+			String path;
+			if(chosenFile != null) {
+			    path = chosenFile.getPath();
+			} else {
+			    //default return value
+			    path = "";
+			}
+			
+			System.out.println(path);
+			
+			File fileRead1 = new File(path);
+			System.out.println(fileRead1.getAbsolutePath().substring(fileRead1.getAbsolutePath().lastIndexOf("\\")+1));
+			
+			
+			
+			
+			if(path!="")
 			{
 				ArrayList<Task> loaded = new ArrayList<Task>();
 				try {
-					File file = new File(filename+".txt");
+					
+					File file = new File(path);
+					
 					BufferedReader br = new BufferedReader(new FileReader(file));  
+					
 					 int numberofTasks = Integer.parseInt(br.readLine());
 					 for(int i = 0; i<numberofTasks;i++)
 					 {
@@ -212,7 +331,9 @@ public class GUI1 extends BorderPane{
 						 Task newTask = new Task(desc,prior,stMonth,stDay,stYear,enMonth,enDay,enYear, status);
 						 loaded.add(newTask);
 						 
+						 
 					 }
+					 
 					 if(loaded!=null)
 					 {
 						 taskList = loaded;
