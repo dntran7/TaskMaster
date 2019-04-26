@@ -24,16 +24,43 @@ public class Task {
 		this.enmonth = endmonth;
 		this.enday = endday;
 		this.enyear = endyear;
-		String temp = Integer.toString(endyear)+Integer.toString(endmonth)+Integer.toString(endday);
+		String endmonthString;
+		if(endmonth<10) {
+			endmonthString = "0"+Integer.toString(endmonth);
+		}
+		else {
+			endmonthString = Integer.toString(endmonth);
+		}
+		String enddayString;
+		if(endday<10) {
+			enddayString = "0"+Integer.toString(endday);
+		}
+		else {
+			enddayString = Integer.toString(endday);
+		}
+		String temp = Integer.toString(endyear)+endmonthString+enddayString;
 		this.endate = Integer.parseInt(temp);
 		
 
 		this.stmonth = stmonth;
 		this.stday = stday;
 		this.styear = styear;
-		temp = Integer.toString(styear)+Integer.toString(stmonth)+Integer.toString(stday);
+		String stmonthString;
+		if(stmonth<10) {
+			stmonthString = "0"+Integer.toString(stmonth);
+		}
+		else {
+			stmonthString = Integer.toString(stmonth);
+		}
+		String stdayString;
+		if(stday<10) {
+			stdayString = "0"+Integer.toString(stday);
+		}
+		else {
+			stdayString = Integer.toString(stday);
+		}
+		temp = Integer.toString(styear)+stmonthString+stdayString;
 		this.stdate = Integer.parseInt(temp);
-		
 		this.status = status;
 	}
 
@@ -133,7 +160,43 @@ public class Task {
 		return stdate;
 	}
 
+	public boolean checkDate() {
+		if (stdate<=endate){
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public String convertString(int month) {
 	
+		if(month==1)
+			return "January";
+		else if(month==2)
+			return "February";
+		else if(month==3)
+			return "March";
+		else if(month==4)
+			return "April";
+		else if(month==5)
+			return "May";
+		else if(month==6)
+			return "June";
+		else if(month==7)
+			return "July";
+		else if(month==8)
+			return "August";
+		else if(month==9)
+			return "September";
+		else if(month==10)
+			return "October";
+		else if(month==11)
+			return "November";
+		else if(month==12)
+			return "December";
+		else
+			return "";
+		
+	}
 	public String toString()
 	{
 		String a ="";
@@ -143,7 +206,7 @@ public class Task {
 
 		a+="End Date:\t\t\t" +getenMonth()+"/" +getenDay()+"/" +getenYear()+"\r\n";
 
-		a+="Status:\t\t\t" +status+"\r\n";
+		a+="Status:\t\t\t" +status+"\n";
 		
 		//return "KOPKO";
 		return a;
