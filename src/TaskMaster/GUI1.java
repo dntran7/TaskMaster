@@ -29,6 +29,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -40,6 +41,10 @@ import javafx.event.EventHandler;	//**Need to import to handle event
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+
+/*
+ * Main holds the functionality of the main homepage of the gui
+ */
 public class GUI1 extends BorderPane{
 	private ArrayList<Task> taskList;
 	private ArrayList<Task> completedList;
@@ -55,7 +60,9 @@ public class GUI1 extends BorderPane{
 	
 	
 	
-
+/*
+ * save file function
+ */
   private void SaveFile(String content, File file){
         try {
             FileWriter fileWriter = null;
@@ -69,45 +76,48 @@ public class GUI1 extends BorderPane{
          
   }
 	
-	
+	/*
+	 * Main function for GUI1
+	 */
 	public GUI1(ArrayList<Task> list,ArrayList<Task> completedList, Stage stage, Scene scene)
 	{
 		this.taskList = list;
 		this.completedList = completedList;
 		error = new Label();
 		
+		//error gui, label that labels if there is an error that a user has done
 		error.setText("");
 		error.setTextFill(Color.RED);
 		a = new GUI1ButtonsandListPane(this.taskList,this.completedList,stage,scene);
 		this.setCenter(a);
 		
 		//Top part of the GUI
-		
 		BorderPane top = new BorderPane();
+		HBox v = new HBox();
 		
-		
-		Button m = new Button("Import: ");
+		Button m = new Button("Import");
 		m.setOnAction(new importButton());
 		
-		b = new TextField();
-		TilePane mb = new TilePane(2,1);
+		Button newButton = new Button("New");
 		
-		/*MenuItem m1 = new MenuItem("New");
-		MenuItem m2 = new MenuItem("Import"); 
+		//new button listener, creates new ins for the list
+		newButton.setOnAction((e)->
+		{
+			this.taskList = new ArrayList<Task>();
+			this.completedList = new ArrayList<Task>();
+			a.setDeletedList(new ArrayList<Task>());
+			GUI1ButtonsandListPane.displayedList = FXCollections.observableList(taskList);
+			GUI1ButtonsandListPane.listView.setFocusTraversable(true);
+			GUI1ButtonsandListPane.listView.refresh();
+			GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+			
+			
+		});
+		v.getChildren().addAll(newButton,m);
+		top.setLeft(v);
 		
-		m.getItems().add(m1);
-		m.getItems().add(m2);
-		MenuBar mb = new MenuBar();
-		mb.getMenus().add(m);*/
 		
-		mb.getChildren().addAll(b);
-		top.setPadding(new Insets(10));
-		top.setLeft(m);
-		top.setCenter(mb);
-		
-		
-		//mb.setOnAction(value);
-		
+		//priority gui for drop down box
 		priorityComboBox = new ComboBox();
         priorityComboBox.getItems().addAll(
     		  "Display by: Priority",
@@ -125,19 +135,22 @@ public class GUI1 extends BorderPane{
 		this.setTop(top);
 		
 		
-		export = new Button("Export Save File");
+		//Bottom part of the GUI
 		
+		//export save listener and gui
+		//be able to save the file of the current list
+		export = new Button("Export Save File");
 		export.setOnAction((e)->
 		{
 			
 			
-			
+			//gets total task
 			 int numberofTasks = taskList.size();
 			 
 			 String result = numberofTasks + "\r\n";
 			 
 			 
-			 
+			 //parse list and add it to result
 			 for(int i = 0; i<numberofTasks;i++)
 			 {
 				 Task task = taskList.get(i);
@@ -157,7 +170,7 @@ public class GUI1 extends BorderPane{
 						 "\r\n" + stYear + "\r\n" + enMonth + "\r\n" +enDay+ "\r\n" + enYear + "\r\n";
 			 }
 			
-			
+			//save file
 			FileChooser fileChooser = new FileChooser();
 			
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -174,10 +187,10 @@ public class GUI1 extends BorderPane{
 			
 			
 		});
-		//Bottom part of the GUI
+		
+		//print gui and print listener
+		//when print is pressed open the new class that holds export functionality
 		print = new Button("Print Report");
-		
-		
 		print.setOnAction((e)->
 		{
 			ExportGUI export = new ExportGUI();
@@ -200,16 +213,12 @@ public class GUI1 extends BorderPane{
 		
 		this.setBottom(bottom);
 		
-	
-		
-		
-		
-		
-		
-		
-		
 		  
 	}
+	
+	/*
+	 * apply sort algo to apporiate combobox index
+	 */
 	private class sortComboBox implements EventHandler<ActionEvent> 
 	{
 		@Override
@@ -278,10 +287,8 @@ public class GUI1 extends BorderPane{
 			    //default return value
 			    path = "";
 			}	// TODO Auto-generated method stub
-			String filename = b.getText();
-			
-			
-			if(filename!="")
+		
+			if(path!="")
 			{
 				ArrayList<Task> loaded = new ArrayList<Task>();
 				try {
@@ -309,8 +316,7 @@ public class GUI1 extends BorderPane{
 					 {
 						 taskList = loaded;
 						 System.out.println(loaded);
-						/* ArrayList<Task> completedList = new ArrayList<Task>();
-						 a = new GUI1ButtonsandListPane(taskList,completedList,st,sc);*/
+			
 						 a.displayedList = FXCollections.observableArrayList(taskList);
 						 a.listView.setItems(a.displayedList);
 						 error.setText("successfully loaded file");
@@ -325,61 +331,5 @@ public class GUI1 extends BorderPane{
 					
 		}
 		}
-	 private class exportButton implements EventHandler<ActionEvent> 
-		{	
-		//Missing Listeners
-
-		@Override
-		public void handle(ActionEvent event) {
-			// TODO Auto-generated method stub
-			TextInputDialog dialog = new TextInputDialog("Export Save File");
-			dialog.setTitle("Export Save File");
-			dialog.setHeaderText("Enter name of save file:");
-			dialog.setContentText("Name:");
-			 
-			Optional<String> result = dialog.showAndWait();
-			if(result!=null)
-			{System.out.println(result.get());}
-			ObservableList<Task> savingList = a.listView.getItems();
-			String savingString =savingList.size()+"\n";
-			for(int i =0;i<savingList.size();i++)
-			{
-				savingString = savingString+savingList.get(i).getDescription()+"\n";
-				savingString = savingString+savingList.get(i).getPriority()+"\n";
-				savingString = savingString+savingList.get(i).getStatus()+"\n";
-				savingString = savingString+savingList.get(i).getstMonth()+"\n";
-				savingString = savingString+savingList.get(i).getstDay()+"\n";
-				savingString = savingString+savingList.get(i).getstYear()+"\n";
-				savingString = savingString+savingList.get(i).getenMonth()+"\n";
-				savingString = savingString+savingList.get(i).getenDay()+"\n";
-				savingString = savingString+savingList.get(i).getenYear()+"\n";
-			}
-			try {
-
-	    		File tempFile = new File(result.get()+".txt" );
-	    		if(!tempFile.exists())
-	    		{
-				FileWriter writer = new FileWriter(result.get()+".txt", true);
-				
-					BufferedWriter bufferWritter = new BufferedWriter(writer);
-					bufferWritter.write(savingString);
-					bufferWritter.close();
-					Alert alert = new Alert(AlertType.CONFIRMATION,"Your export file was successfully saved.");
-		    		alert.showAndWait();
-	    		}
-	    		else
-	    		{
-	    			Alert alert = new Alert(AlertType.ERROR,"There was an issue saving your file.Please try again with a different name");
-		    		alert.showAndWait();
-	    		}
-
-	    	}
-	    	catch (IOException ex) {
-	    		Alert alert = new Alert(AlertType.ERROR,"There was an issue saving your file.Please try again with a different name");
-	    		alert.showAndWait();
-			}
-				
-			}
-					
-		}
+	
 }

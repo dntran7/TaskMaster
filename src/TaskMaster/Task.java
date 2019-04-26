@@ -10,12 +10,27 @@ public class Task {
 	private int enmonth, enday, enyear, endate;
 	private String status;
 	
-	
+
+	/*
+	 * constructor for task
+	 */
 	public Task()
 	{
 		
 	}
-	
+
+	 /**
+		 * Task Object initializer
+		 * @param description, description of the task
+		 * @param prior, priority numberr of the task
+		 * @param stmonth, starting month
+		 * @param stdat, starting day
+		 * @param styear, starting year
+		 * @param endmonth, ending month
+		 * @param enddat, ending day
+		 * @param endyear, ending year
+		 * @param status, status of the task
+		*/
 	public Task(String description, int prior, int stmonth, int stday, int styear, int endmonth, int endday, int endyear, String status)
 	{
 		this.description = description;
@@ -64,101 +79,148 @@ public class Task {
 		this.status = status;
 	}
 
-
+	//getters and setters for each variable
+/*
+ * getter for description
+ */
 	public String getDescription() {
 		return description;
 	}
 
-
+/*
+ * setter for description
+ */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-
+/*
+ * getter for priority
+ */
 	public int getPriority() {
 		return priority;
 	}
 
-
+/*
+ * setter for priority
+ */
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
 
-
+/*
+ * getter for month
+ */
 	public int getstMonth() {
 		return stmonth;
 	}
 
-
+/*
+ * Setter for month
+ */
 	public void setstMonth(int stmonth) {
 		this.stmonth = stmonth;
 	}
 
-
+/*
+ * getter for start day
+ */
 	public int getstDay() {
 		return stday;
 	}
 
-
+/*
+ * setter for day
+ */
 	public void setstDay(int stday) {
 		this.stday = stday;
 	}
 
-
+/*
+ * getter for start year
+ */
 	public int getstYear() {
 		return styear;
 	}
 
-
+/*
+ * setter for start year
+ */
 	public void setstYear(int year) {
 		this.styear = year;
 	}
 	
+	/*
+	 * getter for end month
+	 */
 	public int getenMonth() {
 		return enmonth;
 	}
 
-
+/*
+ * setter end month
+ */
 	public void setenMonth(int enmonth) {
 		this.enmonth = enmonth;
 	}
 
-
+/*
+ * getter for end day
+ */
 	public int getenDay() {
 		return enday;
 	}
 
-
+/*
+ * setter for end day
+ */
 	public void setenDay(int enday) {
 		this.enday = enday;
 	}
 
-
+/*
+ * getter for end year
+ */
 	public int getenYear() {
 		return enyear;
 	}
 
-
+/*
+ * setter for end year
+ */
 	public void setenYear(int year) {
 		this.enyear = year;
 	}
-
+/*
+ * getter for status
+ */
 	public String getStatus() {
 		return status;
 	}
 
-
+/*
+ * setter for status
+ */
 	public void setStatus(String status) {
 		this.status = status;
 	}
 	
+	/*
+	 * getter for end date
+	 */
 	public int getenDate() {
 		return endate;
 	}
 	
+	/*
+	 * getter for start date
+	 */
 	public int getstDate() {
 		return stdate;
 	}
+	/*
+	 * check date if start date is before end date
+	 */
 
 	public boolean checkDate() {
 		if (stdate<=endate){
@@ -167,6 +229,10 @@ public class Task {
 			return false;
 		}
 	}
+	
+	/*
+	 * convert number to string
+	 */
 	public String convertString(int month) {
 	
 		if(month==1)
@@ -197,6 +263,9 @@ public class Task {
 			return "";
 		
 	}
+	/*
+	 * to string method that prints the object with the apporiate format
+	 */
 	public String toString()
 	{
 		String a ="";

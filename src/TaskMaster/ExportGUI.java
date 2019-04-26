@@ -1,5 +1,8 @@
 package TaskMaster;
 import javafx.scene.control.Button;
+/*
+ * This class holds the export GUI and functionality of saving and printing of the final list
+ */
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
@@ -22,6 +25,7 @@ import javafx.stage.Stage;
 
 public class ExportGUI {
 	
+	
 	private VBox vBox,vBox_2,vBox_3;
 	private HBox hBox;
 	private Label notComplete, completed;
@@ -30,8 +34,10 @@ public class ExportGUI {
 	private Button saveButton, backButton;
 	private String ncListExport,cListExport;
 	
-	private ExportGUI_window window = new ExportGUI_window();
-	
+
+	/*
+	 * Save file function
+	 */
 	  private void SaveFile(String content, File file){
 	        try {
 	            FileWriter fileWriter = null;
@@ -46,6 +52,9 @@ public class ExportGUI {
 	  }
 	
     
+	 /*
+	  * Export GUI main 
+	  */
 	public void ExportGUI(ArrayList<Task> list, ArrayList<Task> completedList,ArrayList<Task> deletedList, Stage mainWindow, Scene scene1) {
     	
     	vBox     = new VBox();
@@ -60,9 +69,9 @@ public class ExportGUI {
         notCompList = new TextArea("");
         vBox_2.getChildren().addAll(notComplete,notCompList);
         String tempNotCompletedList = "";
-        for(int i = 0;i<list.size();i++)
+        for(int i = 0;i<GUI1ButtonsandListPane.displayedList.size();i++)
         {
-        	tempNotCompletedList +=list.get(i).toString()+"\r\n\r\n";
+        	tempNotCompletedList +=GUI1ButtonsandListPane.displayedList.get(i).toString()+"\r\n\r\n";
         }
         notCompList.setText(tempNotCompletedList);
         cListExport = notCompList.getText();
@@ -100,7 +109,7 @@ public class ExportGUI {
     	saveButton = new Button("SAVE");
     	
     	  
-          
+          //Final format for the printing of the task list
            
           final String result = "Not Completed List:\r\n"
         		  + tempNotCompletedList
@@ -108,12 +117,8 @@ public class ExportGUI {
         		  + CompletedList 
           		  + "\r\n_________________________________________________________\r\nDeleted List:\r\n"
           		  + deletedList ;
-          
-          Text textSong = TextBuilder.create()
-                  .text(result)
-                  .build();                
-           
-    	
+       
+    	//listener for the save button, opens file explorer and pick location to save txt file
     	saveButton.setOnAction((e)->//set the an action for when the user clicks on the save button
     	{ 
     		Stage stage_2 = new Stage();
@@ -134,7 +139,7 @@ public class ExportGUI {
     		
     		
     		
- 
+    	//back button listener, goes back to the main gui
     	backButton = new Button("BACK");
     	backButton.setOnAction((e)->
    		{
@@ -151,7 +156,7 @@ public class ExportGUI {
     	vBox.getChildren().addAll(vBox_2,vBox_3,hBox);
     	Scene scene = new Scene(vBox, 800, 500);
     	
-
+    	mainWindow.setTitle("Export");
     	mainWindow.setScene(scene);
     	mainWindow.show();	
     	

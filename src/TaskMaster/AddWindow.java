@@ -31,13 +31,17 @@ import javafx.event.EventHandler;	//**Need to import to handle event
  * Description: Builds AddWindow scene and implements some functionality
 */
 public class AddWindow{
+	
 	private Scene addScene;
 	private TextField priorityInput;
 	private int priority;
 	private ArrayList<Task> newList;
 	
 	
-	
+	/*
+	 * Add window, the gui for the add function and edit function.
+	 * takes in parameters for arraylist of task, the stage, scene and the index of what the current list is editiinng
+	 */
 	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1, int index) {
 		VBox layout = new VBox(20);
 		
@@ -108,7 +112,7 @@ public class AddWindow{
 		ObservableList<Integer> day1Array = arrayOfNums(30);
 		day1Input.getItems().addAll(day1Array);
 		
-	
+	//Listener for month editor
 		
 		months1.setOnAction(new EventHandler<ActionEvent>() { //Changes days based on month selection
 			@Override
@@ -132,9 +136,8 @@ public class AddWindow{
 					
 			}
 		});
-		//day1Input.setPrefHeight(30);
-		//day1Input.setPrefWidth(85);
-		
+	
+		//label for year
 		Label yearLabel1 = new Label("Year:");
 		yearLabel1.setStyle("-fx-font: 18 arial");
 		TextField year1Input = new TextField();
@@ -178,6 +181,7 @@ public class AddWindow{
 		ObservableList<Integer> day2Array = arrayOfNums(30);
 		day2Input.getItems().addAll(day2Array);
 	
+		//listener for month or end month
 		months2.setOnAction(new EventHandler<ActionEvent>() { //Back button functionality
 			@Override
 			public void handle(ActionEvent event) {
@@ -201,9 +205,7 @@ public class AddWindow{
 			}
 		});
 		
-		//day2Input.setPrefHeight(30);
-		//day2Input.setPrefWidth(85);
-
+		//label for year
 		Label yearLabel2 = new Label("Year:");
 		yearLabel2.setStyle("-fx-font: 18 arial");
 		TextField year2Input = new TextField();
@@ -219,6 +221,8 @@ public class AddWindow{
 		Label progressLabel = new Label("Progress:");
 		progressLabel.setStyle("-fx-font: 16 arial");
 		ComboBox<String> progressInput = new ComboBox<String>();
+		
+		//progress drop down menu
 		progressInput.getItems().addAll(
 				"Not Started",
 				"In progress",
@@ -235,8 +239,8 @@ public class AddWindow{
 		back.setStyle(("-fx-font: 24 arial"));
 		back.setPrefWidth(110);
 		back.setPrefHeight(60);
-		//GridPane.setConstraints(back, 0, 2);
 		
+		//save button
 		Button save = new Button("Save");
 		save.setStyle(("-fx-font: 24 arial"));
 		save.setPrefWidth(110);
@@ -244,7 +248,8 @@ public class AddWindow{
 		buttonLayout.setAlignment(Pos.CENTER);
 		buttonLayout.getChildren().addAll(back, save);
 		
-		
+	//if index is index = -1 that means we are adding new instnace to the list thus update gui accordingly
+	//if index is index != -1 that means we editing an instnace of the list thus update gui to set the values
 		if(index!=-1) {
 			layout.getChildren().addAll(grid, descriptionInput, prioLayout);
 		}
@@ -253,10 +258,8 @@ public class AddWindow{
 		}
 		layout.getChildren().addAll(startDate, date1Layout, endDate, date2Layout, progressLayout, buttonLayout); //Sets main vbox layout
 		
-		/*
-		 * Error label
-		 */
-		
+	
+		//error label to showcase what error 
 		Label error = new Label();
 		error.setText("");
 		error.setTextFill(Color.RED);
@@ -269,7 +272,7 @@ public class AddWindow{
 		layout.getChildren().add(bottom);
 		
 		
-		
+		//get the values from the list and put it into the current add window since it is an edit
 		addScene = new Scene(layout, 800, 550);
 		if(index!=-1) { //Set edit parameters to task values
 			Task temp= GUI1ButtonsandListPane.displayedList.get(index);
@@ -284,6 +287,16 @@ public class AddWindow{
 			progressInput.setValue(temp.getStatus());
 		}
 		
+		//automatically put not started for a new state
+		
+		if (index  == -1)
+		{
+
+			
+			progressInput.setValue("Not Started");
+		}
+	
+		
 		
 		
 		
@@ -295,16 +308,23 @@ public class AddWindow{
 				mainWindow.setScene(scene1);
 			}
 		});
-		//if(index==-1) {
+		
 		save.setOnAction(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
-				//newList = list; 
+				
 				
 				boolean checkUniqueDescription = true;
 				
+				//force progess to be not started if adding a new item to list
+				if (index  == -1)
+				{
+					progressInput.setValue("Not Started");
+				}
 			
 				
+				
+				//checking if descrption is an unique value
 				
 				for (int i =0 ; i < list.size(); i++ )
 				{
@@ -317,6 +337,7 @@ public class AddWindow{
 						checkUniqueDescription = false;
 					}
 				}
+				//check if anything is empty
 				if(!(months1.getSelectionModel().isEmpty() || months2.getSelectionModel().isEmpty()  || year1Input.getText().trim().equals("")|| 
 						year2Input.getText().trim().equals("") || day1Input.getSelectionModel().isEmpty() || 
 						day2Input.getSelectionModel().isEmpty() || descriptionInput.getText().trim().equals("") || 
@@ -327,8 +348,10 @@ public class AddWindow{
 					{
 						
 					
-			
+					//check if start date is before the finish date
+					
 					if(checkInt(year1Input) && checkInt(year2Input)) {
+						//parse all input and make a new instance of task and add it to the list
 						if(index==-1) {
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
@@ -349,13 +372,14 @@ public class AddWindow{
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
 							
-								
+								//make sure the prority dont equal to each other and that it is an integer
+							//parse all edited data from add window and add it to the task list
 							if(checkInt(priorityInput) && !priorityInput.getText().trim().equals("")) {
 									if(Integer.parseInt(priorityInput.getText())<=GUI1ButtonsandListPane.displayedList.size() && Integer.parseInt(priorityInput.getText())>0) {
 										Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, day1Input.getValue(),
 									    Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
 										if(newTask.checkDate()) {	
-											//if(Integer.parseInt(priorityInput.getText())!=index+1) {
+												
 												for(int inc=0;inc<GUI1ButtonsandListPane.displayedList.size(); inc++) {
 													if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()<Integer.parseInt(priorityInput.getText())){
 														if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()<= Integer.parseInt(priorityInput.getText())
@@ -377,11 +401,15 @@ public class AddWindow{
 													}
 										
 												}
+												//refresh the code the main list
 												GUI1ButtonsandListPane.displayedList.remove(index);
 												GUI1ButtonsandListPane.displayedList.add(index, newTask);
-											//	GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+												GUI1ButtonsandListPane.listView.setFocusTraversable(true);
+												GUI1ButtonsandListPane.listView.refresh();
+												GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+									
 												System.out.println(GUI1ButtonsandListPane.displayedList.toString());
-											//}
+										
 											
 											mainWindow.setScene(scene1);
 										}else {
@@ -391,6 +419,10 @@ public class AddWindow{
 										error.setText("Priority out of bounds!");
 									 }
 								}
+							else
+							{
+								error.setText("Please make sure correct fields are integers");
+							}
 						
 						}
 					
@@ -412,8 +444,10 @@ public class AddWindow{
 			}
 		});
 		}
-	//}
 	
+	/*
+	 * checks if the string is a number
+	 */
 	private boolean checkInt(TextField field) { //Checks if textfield entry is an integer 
 			
 			try {
@@ -423,6 +457,9 @@ public class AddWindow{
 				return false;
 			}
 	}
+	/*
+	 * returns array of ints
+	 */
 	private ObservableList<Integer> arrayOfNums(int size){
 		ObservableList<Integer> array = FXCollections.observableArrayList();
 		for(int inc=0;inc<size;inc++) {
@@ -430,13 +467,22 @@ public class AddWindow{
 		}
 		return array;
 	}
+	/*
+	 * returns scene
+	 */
 	public Scene getScene() {
 		return addScene;
 	}
-	
+	/*
+	 * return new list
+	 */
 	public ArrayList<Task> getNewList(){
 		return newList;
 	}
+	
+	/*
+	 * util function that returns sspecifc number of month from the combo box
+	 */
 	private int getMonthNum(ComboBox monthBox)
 	{
 		int result = 0;

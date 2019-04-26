@@ -50,6 +50,11 @@ public class GUI1ButtonsandListPane extends HBox{
 	public ArrayList<Task> getDeletedTaskList(){
 		return deletedTasks;
 	}
+	
+	public void setDeletedList(ArrayList<Task> arr)
+	{
+		deletedTasks = arr;
+	}
 
 	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
 	{
@@ -94,9 +99,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		
 		
 		buttonlist.getChildren().addAll(addPane,deletePane,changePane,completePane,error);
-		taskList.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
-		taskList.add(new Task( "aest", 2, 22, 23, 1992,0,0,0, "sd"));
-		//log.add(new Task( "test", 1, 23, 23, 1999,0,0,0, "sd"));
+		
 		displayedList = FXCollections.observableList(taskList);
 		listView = new ListView<Task> (displayedList);
 		listView.setPrefWidth(400);
@@ -115,7 +118,7 @@ public class GUI1ButtonsandListPane extends HBox{
 					int index = (listView.getSelectionModel().getSelectedIndex());
 					if(index>=0)
 					{
-						//sortTaskList(1);
+				
 					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
 					else {
@@ -124,6 +127,7 @@ public class GUI1ButtonsandListPane extends HBox{
 			}
 		});
 	}
+	
 	/**
 	 * Calls the action listener for the add button
 	 */
@@ -140,16 +144,34 @@ public class GUI1ButtonsandListPane extends HBox{
 						Task copy = listView.getItems().get(index);
 						deletedTasks.add(copy);
 						listView.getItems().remove(index);
+						//System.out.println(taskList);
+						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
+						
+						
+						int complprior = copy.getPriority();
+						taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+				
+						for (int i = 0; i < displayedList.size(); i++)
+						{
+							if(displayedList.get(i).getPriority()>complprior)
+							{
+								displayedList.get(i).setPriority(displayedList.get(i).getPriority()-1);
+							}
+						}
+						
+						
 					}
 					else {
 						error.setText("ERROR: an entry must be selected for deletion");
 					}
 		}
 		}
+	 
 	 /**
 		 * Calls the action listener for the complete button
 		 */
+
  private class completeButton implements EventHandler<ActionEvent> 
 	{	
 	//Missing Listeners
@@ -160,7 +182,6 @@ public class GUI1ButtonsandListPane extends HBox{
 				int index = (listView.getSelectionModel().getSelectedIndex());
 				if(index>=0)
 				{	
-					//Getting values
 					Task temp = listView.getItems().get(index);
 					listView.getItems().get(index).setStatus("Completed");
 				Date date = new Date();
@@ -176,6 +197,7 @@ public class GUI1ButtonsandListPane extends HBox{
 				
 					Task copy = listView.getItems().get(index);
 					listView.getItems().remove(index);
+					//log.add(index,copy);
 					Task complete = new Task();
 					complete.setDescription(temp.getDescription());
 					complete.setenDay(temp.getenDate());
@@ -186,10 +208,23 @@ public class GUI1ButtonsandListPane extends HBox{
 					complete.setstYear(temp.getstYear());
 					complete.setPriority(temp.getPriority());
 					complete.setStatus(temp.getStatus());
+				//	taskList.remove(index);						taskList.remove(index);
+
 
  					completedTasks.add(complete);
- 					//Adding to tasklog
+ 					int complprior = complete.getPriority();
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+			
+					for (int i = 0; i < displayedList.size(); i++)
+					{
+						if(displayedList.get(i).getPriority()>complprior)
+						{
+							displayedList.get(i).setPriority(displayedList.get(i).getPriority()-1);
+						}
+					}
+					
+					
+					
 				}
 				else {
 					error.setText("ERROR: an entry must be selected for completion");
@@ -198,6 +233,7 @@ public class GUI1ButtonsandListPane extends HBox{
 	}
 	}
  
+
  /**
 	 * Calls the action listener for the add button
 	 * @param Button button to be passed in to listener
@@ -205,23 +241,20 @@ public class GUI1ButtonsandListPane extends HBox{
 	 * @param scene1 to have a scene to transition back too
 	 */
 
- 
  public void addFunct(Button button, Stage stage, Scene scene1) {
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				//sortTaskList(1);
+				
 				AddWindow addW = new AddWindow(taskList, stage, scene1, -1);
 				stage.setScene(addW.getScene());
-				//displayedList.add(addW.getNewList().get(2));
+			
 			}
 		});
 	}
  public void setTaskList(ArrayList<Task> newList) {
 	 displayedList = FXCollections.observableList(newList);
-    /* listView = new ListView<Task> (displayedList);
-     listView.refresh();
-     listView.setFocusTraversable(true);*/
+    
  }
  
  
