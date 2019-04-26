@@ -124,6 +124,9 @@ public class GUI1ButtonsandListPane extends HBox{
 			}
 		});
 	}
+	/**
+	 * Calls the action listener for the add button
+	 */
 	 private class deleteButton implements EventHandler<ActionEvent> 
 		{	
 		//Missing Listeners
@@ -137,8 +140,6 @@ public class GUI1ButtonsandListPane extends HBox{
 						Task copy = listView.getItems().get(index);
 						deletedTasks.add(copy);
 						listView.getItems().remove(index);
-						//System.out.println(taskList);
-						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
 					}
 					else {
@@ -146,7 +147,9 @@ public class GUI1ButtonsandListPane extends HBox{
 					}
 		}
 		}
-
+	 /**
+		 * Calls the action listener for the complete button
+		 */
  private class completeButton implements EventHandler<ActionEvent> 
 	{	
 	//Missing Listeners
@@ -157,6 +160,7 @@ public class GUI1ButtonsandListPane extends HBox{
 				int index = (listView.getSelectionModel().getSelectedIndex());
 				if(index>=0)
 				{	
+					//Getting values
 					Task temp = listView.getItems().get(index);
 					listView.getItems().get(index).setStatus("Completed");
 				Date date = new Date();
@@ -172,7 +176,6 @@ public class GUI1ButtonsandListPane extends HBox{
 				
 					Task copy = listView.getItems().get(index);
 					listView.getItems().remove(index);
-					//log.add(index,copy);
 					Task complete = new Task();
 					complete.setDescription(temp.getDescription());
 					complete.setenDay(temp.getenDate());
@@ -183,11 +186,9 @@ public class GUI1ButtonsandListPane extends HBox{
 					complete.setstYear(temp.getstYear());
 					complete.setPriority(temp.getPriority());
 					complete.setStatus(temp.getStatus());
-				//	taskList.remove(index);						taskList.remove(index);
-
 
  					completedTasks.add(complete);
-
+ 					//Adding to tasklog
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
 				}
 				else {
@@ -197,7 +198,12 @@ public class GUI1ButtonsandListPane extends HBox{
 	}
 	}
  
-
+ /**
+	 * Calls the action listener for the add button
+	 * @param Button button to be passed in to listener
+	 * @param Stage stage to set scene in addWindow class
+	 * @param scene1 to have a scene to transition back too
+	 */
 
  
  public void addFunct(Button button, Stage stage, Scene scene1) {

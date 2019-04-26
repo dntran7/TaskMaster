@@ -57,8 +57,7 @@ public class ExportGUI_window extends Application{
 	    	}
 	    	catch (IOException ex) {
 				//ex.printStackTrace();
-	    		ex.getMessage();
-	    		
+	    		ex.getMessage();	
 			}
 	    	
     	});
