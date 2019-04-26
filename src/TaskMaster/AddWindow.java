@@ -8,6 +8,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.geometry.*;
@@ -22,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.EventHandler;	//**Need to import to handle event
 
@@ -33,6 +35,9 @@ public class AddWindow{
 	private TextField priorityInput;
 	private int priority;
 	private ArrayList<Task> newList;
+	
+	
+	
 	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1, int index) {
 		VBox layout = new VBox(20);
 		
@@ -102,6 +107,8 @@ public class AddWindow{
 		ComboBox<Integer> day1Input = new ComboBox<Integer>();
 		ObservableList<Integer> day1Array = arrayOfNums(30);
 		day1Input.getItems().addAll(day1Array);
+		
+	
 		
 		months1.setOnAction(new EventHandler<ActionEvent>() { //Changes days based on month selection
 			@Override
@@ -212,6 +219,7 @@ public class AddWindow{
 		Label progressLabel = new Label("Progress:");
 		progressLabel.setStyle("-fx-font: 16 arial");
 		ComboBox<String> progressInput = new ComboBox<String>();
+		
 		progressInput.getItems().addAll(
 				"Not Started",
 				"In progress",
@@ -246,6 +254,22 @@ public class AddWindow{
 		}
 		layout.getChildren().addAll(startDate, date1Layout, endDate, date2Layout, progressLayout, buttonLayout); //Sets main vbox layout
 		
+		/*
+		 * Error label
+		 */
+		
+		Label error = new Label();
+		error.setText("");
+		error.setTextFill(Color.RED);
+		
+		BorderPane bottom = new BorderPane();
+		bottom.setPadding(new Insets(15));
+		
+		bottom.setCenter(error);
+		
+		layout.getChildren().add(bottom);
+		
+		
 		
 		addScene = new Scene(layout, 800, 550);
 		if(index!=-1) { //Set edit parameters to task values
@@ -261,6 +285,17 @@ public class AddWindow{
 			progressInput.setValue(temp.getStatus());
 		}
 		
+		if (index  == -1)
+		{
+
+			
+			progressInput.setValue("Not Started");
+		}
+	
+		
+		
+		
+		
 		mainWindow.setScene(addScene); //Sets addScene to window
 		
 		back.setOnAction(new EventHandler<ActionEvent>() { //Back button functionality
@@ -270,15 +305,43 @@ public class AddWindow{
 			}
 		});
 		//if(index==-1) {
-		save.setOnAction(new EventHandler<ActionEvent>() { //Back button functionality
+		save.setOnAction(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
 				//newList = list; 
+				
+				boolean checkUniqueDescription = true;
+				
+				if (index  == -1)
+				{
+					progressInput.setValue("Not Started");
+				}
+			
+				
+				
+				
+				
+				for (int i =0 ; i < list.size(); i++ )
+				{
+					Task item = list.get(i);
+					
+					
+					
+					if (index!= i &&item.getDescription().toLowerCase().equals(descriptionInput.getText().toLowerCase()))
+					{
+						checkUniqueDescription = false;
+					}
+				}
 				if(!(months1.getSelectionModel().isEmpty() || months2.getSelectionModel().isEmpty()  || year1Input.getText().trim().equals("")|| 
 						year2Input.getText().trim().equals("") || day1Input.getSelectionModel().isEmpty() || 
 						day2Input.getSelectionModel().isEmpty() || descriptionInput.getText().trim().equals("") || 
 						progressInput.getSelectionModel().isEmpty()))
 				{
+					
+					if (checkUniqueDescription)
+					{
+						
+					
 			
 					if(checkInt(year1Input) && checkInt(year2Input)) {
 						if(index==-1) {
@@ -290,64 +353,82 @@ public class AddWindow{
 							if(newTask.checkDate()) {
 							   GUI1ButtonsandListPane.displayedList.add(newTask);
 							   mainWindow.setScene(scene1);
-							}else{
-								System.out.println("Start date is after end date!");
 							}
-						}else {
+							else
+							{
+								error.setText("Start date is after end date!");
+							}
+						}
+						else 
+						{
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
 							
+								
 							if(checkInt(priorityInput) && !priorityInput.getText().trim().equals("")) {
-								if(Integer.parseInt(priorityInput.getText())<=GUI1ButtonsandListPane.displayedList.size() && Integer.parseInt(priorityInput.getText())>0) {
-									Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, day1Input.getValue(),
-								    Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
-									if(newTask.checkDate()) {	
-										//if(Integer.parseInt(priorityInput.getText())!=index+1) {
-											for(int inc=0;inc<GUI1ButtonsandListPane.displayedList.size(); inc++) {
-												if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()<Integer.parseInt(priorityInput.getText())){
-													if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()<= Integer.parseInt(priorityInput.getText())
-													&& GUI1ButtonsandListPane.displayedList.get(inc).getPriority() > GUI1ButtonsandListPane.displayedList.get(index).getPriority()) {
-														
-														Task temp1 = GUI1ButtonsandListPane.displayedList.get(inc);
-														temp1.setPriority(temp1.getPriority()-1);
-														GUI1ButtonsandListPane.displayedList.remove(inc);
-														GUI1ButtonsandListPane.displayedList.add(inc, temp1);
+									if(Integer.parseInt(priorityInput.getText())<=GUI1ButtonsandListPane.displayedList.size() && Integer.parseInt(priorityInput.getText())>0) {
+										Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, day1Input.getValue(),
+									    Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
+										if(newTask.checkDate()) {	
+											//if(Integer.parseInt(priorityInput.getText())!=index+1) {
+												for(int inc=0;inc<GUI1ButtonsandListPane.displayedList.size(); inc++) {
+													if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()<Integer.parseInt(priorityInput.getText())){
+														if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()<= Integer.parseInt(priorityInput.getText())
+														&& GUI1ButtonsandListPane.displayedList.get(inc).getPriority() > GUI1ButtonsandListPane.displayedList.get(index).getPriority()) {
+															
+															Task temp1 = GUI1ButtonsandListPane.displayedList.get(inc);
+															temp1.setPriority(temp1.getPriority()-1);
+															GUI1ButtonsandListPane.displayedList.remove(inc);
+															GUI1ButtonsandListPane.displayedList.add(inc, temp1);
+														}
+													}if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()>Integer.parseInt(priorityInput.getText())) {
+														if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()>= Integer.parseInt(priorityInput.getText())
+																&& GUI1ButtonsandListPane.displayedList.get(inc).getPriority() < GUI1ButtonsandListPane.displayedList.get(index).getPriority()) {
+															Task temp1 = GUI1ButtonsandListPane.displayedList.get(inc);
+															temp1.setPriority(temp1.getPriority()+1);
+															GUI1ButtonsandListPane.displayedList.remove(inc);
+															GUI1ButtonsandListPane.displayedList.add(inc, temp1);
+														}
 													}
-												}if(GUI1ButtonsandListPane.displayedList.get(index).getPriority()>Integer.parseInt(priorityInput.getText())) {
-													if(GUI1ButtonsandListPane.displayedList.get(inc).getPriority()>= Integer.parseInt(priorityInput.getText())
-															&& GUI1ButtonsandListPane.displayedList.get(inc).getPriority() < GUI1ButtonsandListPane.displayedList.get(index).getPriority()) {
-														Task temp1 = GUI1ButtonsandListPane.displayedList.get(inc);
-														temp1.setPriority(temp1.getPriority()+1);
-														GUI1ButtonsandListPane.displayedList.remove(inc);
-														GUI1ButtonsandListPane.displayedList.add(inc, temp1);
-													}
-												}
-									
-											}
-											GUI1ButtonsandListPane.displayedList.remove(index);
-											GUI1ButtonsandListPane.displayedList.add(index, newTask);
-										//	GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
-											System.out.println(GUI1ButtonsandListPane.displayedList.toString());
-										//}
 										
-										mainWindow.setScene(scene1);
+												}
+												GUI1ButtonsandListPane.displayedList.remove(index);
+												GUI1ButtonsandListPane.displayedList.add(index, newTask);
+												GUI1ButtonsandListPane.listView.setFocusTraversable(true);
+												GUI1ButtonsandListPane.listView.refresh();
+												GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+												
+												//GUI1ButtonsandListPane.displayedList.add(index, newTask);
+												
+											//	GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+												System.out.println(GUI1ButtonsandListPane.displayedList.toString());
+											//}
+											
+											mainWindow.setScene(scene1);
+										}else {
+											error.setText("Start date is after end date!");
+										}
 									}else {
-										System.out.println("Start date is after end date!");
-									}
-								}else {
-									System.out.println("Priority out of bounds!");
-								 }
-							}
+										error.setText("Priority out of bounds!");
+									 }
+								}
+						
 						}
 					
 							
-				
-					}else {
-						System.out.println("Please make sure correct fields are integers");
+					
+						}else {
+							error.setText("Please make sure correct fields are integers");
+						}
+						
+						}
+					else
+					{
+						error.setText("Make sure Descritpion is unique");
 					}
 				}else{
-					System.out.println("Please make sure all fields are filled");
-				
+					error.setText("Please make sure all fields are filled");
+					
 			}
 			}
 		});

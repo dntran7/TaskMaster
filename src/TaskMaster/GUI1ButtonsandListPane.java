@@ -50,6 +50,11 @@ public class GUI1ButtonsandListPane extends HBox{
 	public ArrayList<Task> getDeletedTaskList(){
 		return deletedTasks;
 	}
+	
+	public void setDeletedList(ArrayList<Task> arr)
+	{
+		deletedTasks = arr;
+	}
 
 	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
 	{
@@ -140,6 +145,15 @@ public class GUI1ButtonsandListPane extends HBox{
 						//System.out.println(taskList);
 						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
+						
+						
+						for (int i = index; i < taskList.size(); i++)
+						{
+							
+							taskList.get(i).setPriority(taskList.get(i).getPriority()-1);
+						}
+						
+						
 					}
 					else {
 						error.setText("ERROR: an entry must be selected for deletion");

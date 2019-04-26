@@ -29,10 +29,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;	//**Need to import to handle event
 import javafx.event.EventHandler;	//**Need to import to handle event
@@ -51,6 +53,24 @@ public class GUI1 extends BorderPane{
 	private TextField b;
 	Stage st;
 	Scene sc;
+	
+	
+	
+
+  private void SaveFile(String content, File file){
+        try {
+            FileWriter fileWriter = null;
+             
+            fileWriter = new FileWriter(file);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException ex) {
+            
+        }
+         
+  }
+	
+	
 	public GUI1(ArrayList<Task> list,ArrayList<Task> completedList, Stage stage, Scene scene)
 	{
 		this.taskList = list;
@@ -65,26 +85,30 @@ public class GUI1 extends BorderPane{
 		//Top part of the GUI
 		
 		BorderPane top = new BorderPane();
+		HBox v = new HBox();
 		
-		
-		Button m = new Button("Import: ");
+		Button m = new Button("Import");
 		m.setOnAction(new importButton());
 		
-		b = new TextField();
-		TilePane mb = new TilePane(2,1);
+		Button newButton = new Button("New");
 		
-		/*MenuItem m1 = new MenuItem("New");
-		MenuItem m2 = new MenuItem("Import"); 
+		newButton.setOnAction((e)->
+		{
+			this.taskList = new ArrayList<Task>();
+			this.completedList = new ArrayList<Task>();
+			a.setDeletedList(new ArrayList<Task>());
+			GUI1ButtonsandListPane.displayedList = FXCollections.observableList(taskList);
+			GUI1ButtonsandListPane.listView.setFocusTraversable(true);
+			GUI1ButtonsandListPane.listView.refresh();
+			GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
+			
+			
+		});
+		v.getChildren().addAll(newButton,m);
 		
-		m.getItems().add(m1);
-		m.getItems().add(m2);
-		MenuBar mb = new MenuBar();
-		mb.getMenus().add(m);*/
+
+		top.setLeft(v);
 		
-		mb.getChildren().addAll(b);
-		top.setPadding(new Insets(10));
-		top.setLeft(m);
-		top.setCenter(mb);
 		
 		
 		//mb.setOnAction(value);
@@ -105,8 +129,56 @@ public class GUI1 extends BorderPane{
 		
 		this.setTop(top);
 		
+		
 		export = new Button("Export Save File");
-		export.setOnAction(new exportButton());
+		
+		export.setOnAction((e)->
+		{
+			
+			
+			
+			 int numberofTasks = taskList.size();
+			 
+			 String result = numberofTasks + "\r\n";
+			 
+			 
+			 
+			 for(int i = 0; i<numberofTasks;i++)
+			 {
+				 Task task = taskList.get(i);
+				 String desc = task.getDescription();
+				 int prior = task.getPriority();
+				 String status = task.getStatus();
+				 int stMonth = task.getstMonth();
+				 int stDay = task.getstDay();
+				 int stYear = task.getstYear();
+
+				 int enMonth = task.getenMonth();
+				 int enDay = task.getenDay();
+				 int enYear = task.getenYear();
+				 
+				 
+				 result += desc + "\r\n" + prior +  "\r\n" + status + "\r\n" + stMonth + "\r\n" + stDay + 
+						 "\r\n" + stYear + "\r\n" + enMonth + "\r\n" +enDay+ "\r\n" + enYear + "\r\n";
+			 }
+			
+			
+			FileChooser fileChooser = new FileChooser();
+			
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+	        fileChooser.getExtensionFilters().add(extFilter);
+	        
+	        //Show save file dialog
+	        File file = fileChooser.showSaveDialog(stage);
+	        
+	        if(file != null){
+	            SaveFile(result, file);
+	        }
+	            
+			
+			
+			
+		});
 		//Bottom part of the GUI
 		print = new Button("Print Report");
 		
@@ -186,13 +258,37 @@ public class GUI1 extends BorderPane{
 
 		@Override
 		public void handle(ActionEvent event) {
-			// TODO Auto-generated method stub
-			String filename = b.getText();
-			if(filename!="")
+			FileChooser fileChooser = new FileChooser();
+
+			
+			FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+			fileChooser.getExtensionFilters().add(extentionFilter);
+
+			//Set to user directory or go to default if cannot access
+			String userDirectoryString = System.getProperty("user.home");
+			String path;
+			File userDirectory = new File(userDirectoryString);
+			if(!userDirectory.canRead()) {
+			    userDirectory = new File("c:/");
+			}
+			fileChooser.setInitialDirectory(userDirectory);
+
+			//Choose the file
+			File chosenFile = fileChooser.showOpenDialog(null);
+			//Make sure a file was selected, if not return default
+			
+			if(chosenFile != null) {
+			    path = chosenFile.getPath();
+			} else {
+			    //default return value
+			    path = "";
+			}	// TODO Auto-generated method stub
+		
+			if(path!="")
 			{
 				ArrayList<Task> loaded = new ArrayList<Task>();
 				try {
-					File file = new File(filename+".txt");
+					File file = new File(path);
 					BufferedReader br = new BufferedReader(new FileReader(file));  
 					 int numberofTasks = Integer.parseInt(br.readLine());
 					 for(int i = 0; i<numberofTasks;i++)
@@ -211,6 +307,7 @@ public class GUI1 extends BorderPane{
 						 loaded.add(newTask);
 						 
 					 }
+					 
 					 if(loaded!=null)
 					 {
 						 taskList = loaded;
