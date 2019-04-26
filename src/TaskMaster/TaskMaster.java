@@ -1,3 +1,7 @@
+/***
+*@ClassName:TaskMaster
+*@Description: This class runs the main Application that shows the gui for the project
+***/
 package TaskMaster;
 
 import javafx.application.Application;
@@ -8,6 +12,10 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 
+/***
+*@ClassName:TaskMaster
+*@Description: This class runs the main Application that shows the gui for the project
+***/
 public class TaskMaster extends Application
 {
     private GUI1 a;
@@ -15,6 +23,12 @@ public class TaskMaster extends Application
     private ArrayList<Task> record;
     private ArrayList<Task> tasklist, completedList;
 
+/***
+*@MethodName:start
+*@param: Stage
+*return: void
+*@Description: This class runs the application gui by getting the Stage type
+***/
     public void start(Stage stage)
     {
         StackPane root = new StackPane();
@@ -30,7 +44,12 @@ public class TaskMaster extends Application
         stage.setScene(scene);
         stage.show();
     }
-
+/***
+*@MethodName:main
+*@param: String[] args
+*return: void
+*@Description: This is the main that launches the application gui
+***/
     public static void main(String[] args)
     {
         launch(args);
