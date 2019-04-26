@@ -35,6 +35,9 @@ public class AddWindow{
 	private TextField priorityInput;
 	private int priority;
 	private ArrayList<Task> newList;
+	
+	
+	
 	public AddWindow(ArrayList<Task> list, Stage mainWindow, Scene scene1, int index) {
 		VBox layout = new VBox(20);
 		
@@ -104,6 +107,8 @@ public class AddWindow{
 		ComboBox<Integer> day1Input = new ComboBox<Integer>();
 		ObservableList<Integer> day1Array = arrayOfNums(30);
 		day1Input.getItems().addAll(day1Array);
+		
+	
 		
 		months1.setOnAction(new EventHandler<ActionEvent>() { //Changes days based on month selection
 			@Override
@@ -298,12 +303,16 @@ public class AddWindow{
 				
 				boolean checkUniqueDescription = true;
 				
+			
+				
 				
 				for (int i =0 ; i < list.size(); i++ )
 				{
 					Task item = list.get(i);
 					
-					if (item.getDescription().toLowerCase().equals(descriptionInput.getText().toLowerCase()))
+					
+					
+					if (index!= i &&item.getDescription().toLowerCase().equals(descriptionInput.getText().toLowerCase()))
 					{
 						checkUniqueDescription = false;
 					}
@@ -314,6 +323,9 @@ public class AddWindow{
 						progressInput.getSelectionModel().isEmpty()))
 				{
 					
+					if (checkUniqueDescription)
+					{
+						
 					
 			
 					if(checkInt(year1Input) && checkInt(year2Input)) {
@@ -326,17 +338,19 @@ public class AddWindow{
 							if(newTask.checkDate()) {
 							   GUI1ButtonsandListPane.displayedList.add(newTask);
 							   mainWindow.setScene(scene1);
-							}else{
+							}
+							else
+							{
 								error.setText("Start date is after end date!");
 							}
-						}else {
+						}
+						else 
+						{
 							int monthIndex1 = getMonthNum(months1);
 							int monthIndex2 = getMonthNum(months2);
 							
-							
-							if (checkUniqueDescription)
-							{
-								if(checkInt(priorityInput) && !priorityInput.getText().trim().equals("")) {
+								
+							if(checkInt(priorityInput) && !priorityInput.getText().trim().equals("")) {
 									if(Integer.parseInt(priorityInput.getText())<=GUI1ButtonsandListPane.displayedList.size() && Integer.parseInt(priorityInput.getText())>0) {
 										Task newTask = new Task(descriptionInput.getText(), Integer.parseInt(priorityInput.getText()), monthIndex1, day1Input.getValue(),
 									    Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
@@ -377,23 +391,23 @@ public class AddWindow{
 										error.setText("Priority out of bounds!");
 									 }
 								}
-								
-							}
-							else
-							{
-								error.setText("Make sure description is unique");
-							}
-							
+						
 						}
 					
 							
-				
-					}else {
-						error.setText("Please make sure correct fields are integers");
+					
+						}else {
+							error.setText("Please make sure correct fields are integers");
+						}
+						
+						}
+					else
+					{
+						error.setText("Make sure Descritpion is unique");
 					}
 				}else{
 					error.setText("Please make sure all fields are filled");
-				
+					
 			}
 			}
 		});
