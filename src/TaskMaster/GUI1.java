@@ -98,15 +98,14 @@ public class GUI1 extends BorderPane{
 		Button m = new Button("Import");
 		m.setOnAction(new importButton());
 		
-		Button newButton = new Button("New");
+		Button newButton = new Button("Reset");
 		
 		//new button listener, creates new ins for the list
 		newButton.setOnAction((e)->
 		{
-			this.taskList = new ArrayList<Task>();
-			this.completedList = new ArrayList<Task>();
-			a.setDeletedList(new ArrayList<Task>());
-			GUI1ButtonsandListPane.displayedList = FXCollections.observableList(taskList);
+			completedList.clear();
+			a.setDeletedList();
+			GUI1ButtonsandListPane.displayedList.clear();;
 			GUI1ButtonsandListPane.listView.setFocusTraversable(true);
 			GUI1ButtonsandListPane.listView.refresh();
 			GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
@@ -315,7 +314,6 @@ public class GUI1 extends BorderPane{
 					 if(loaded!=null)
 					 {
 						 taskList = loaded;
-						 System.out.println(loaded);
 			
 						 a.displayedList = FXCollections.observableArrayList(taskList);
 						 a.listView.setItems(a.displayedList);

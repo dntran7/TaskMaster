@@ -39,21 +39,34 @@ public class GUI1ButtonsandListPane extends HBox{
 	private Button Change;
 	private Button Complete;
 	private Label error = new Label();
+	 /**
+		 * returns list of current tasks
+		 */
 	public ArrayList<Task> getTaskList()
 	{
 		return taskList;
 	}
+	 /**
+		 * returns list of completed tasks
+		 */
 	public ArrayList<Task> getCompletedTaskList()
 	{
 		return completedTasks;
+	
 	}
+	 /**
+		 * returns list of deleted tasks
+		 */
 	public ArrayList<Task> getDeletedTaskList(){
 		return deletedTasks;
 	}
 	
-	public void setDeletedList(ArrayList<Task> arr)
+	 /**
+		 * clears list of deletedTasks
+		 */
+	public void setDeletedList()
 	{
-		deletedTasks = arr;
+		deletedTasks.clear();;
 	}
 
 	public GUI1ButtonsandListPane(ArrayList<Task> list,ArrayList<Task> completed, Stage stage, Scene scene)
@@ -109,6 +122,12 @@ public class GUI1ButtonsandListPane extends HBox{
 	
 	}
 	
+	 /**
+		 * Calls the action listener for the edit button
+		 * @param Button button to be passed in to listener
+		 * @param Stage stage to set scene in addWindow class
+		 * @param scene1 to have a scene to transition back too
+		 */
 	
 	public void editFunct(Button button, Stage stage, Scene scene1) {
 		button.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,7 +137,7 @@ public class GUI1ButtonsandListPane extends HBox{
 					int index = (listView.getSelectionModel().getSelectedIndex());
 					if(index>=0)
 					{
-				
+						error.setText("");
 					AddWindow addW = new AddWindow(taskList, stage, scene1, index);
 					}
 					else {
@@ -144,13 +163,12 @@ public class GUI1ButtonsandListPane extends HBox{
 						Task copy = listView.getItems().get(index);
 						deletedTasks.add(copy);
 						listView.getItems().remove(index);
-						//System.out.println(taskList);
-						//System.out.println(deletedTasks);
 						taskLog = taskLog + "Deleted:\n"+copy.toString() +"\n\n\n";
 						
 						
 						int complprior = copy.getPriority();
 						taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+						error.setText("");
 				
 						for (int i = 0; i < displayedList.size(); i++)
 						{
@@ -214,6 +232,7 @@ public class GUI1ButtonsandListPane extends HBox{
  					completedTasks.add(complete);
  					int complprior = complete.getPriority();
 					taskLog = taskLog + "Completed:\n"+copy.toString() +"\n\n\n";
+					error.setText("");
 			
 					for (int i = 0; i < displayedList.size(); i++)
 					{
@@ -245,7 +264,7 @@ public class GUI1ButtonsandListPane extends HBox{
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				error.setText("");
 				AddWindow addW = new AddWindow(taskList, stage, scene1, -1);
 				stage.setScene(addW.getScene());
 			
@@ -278,7 +297,6 @@ public class GUI1ButtonsandListPane extends HBox{
 			 tool = new sortingList(taskList,2);
 			 taskList = tool.returnSortedList();
 		     displayedList= FXCollections.observableList(taskList);
-		     //System.out.println(displayedList.toString());
 			 listView.setItems(displayedList);
 			 break;
 		 case 3:

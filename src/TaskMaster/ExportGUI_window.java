@@ -26,10 +26,18 @@ public class ExportGUI_window extends Application{
 	private BorderPane bp,bp2,bp3;
 	private Export_confirmation window = new Export_confirmation();
 	
+	 /**
+		 * Default function start, does nothing
+		 */
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
 		
 	}
+	 /**
+		 * Overloaded function for start
+		 * @param Stage stage is the main stage for the program
+		 * @param Clist is the list of completed items
+		 * @param nclist is the non completed list of items
+		 */
 	public void start(Stage stage, String clist, String nclist) {
     	stage.setTitle("Export");
 

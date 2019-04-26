@@ -360,6 +360,9 @@ public class AddWindow{
 								     Integer.parseInt(year1Input.getText()), monthIndex2, day2Input.getValue(), Integer.parseInt(year2Input.getText()), progressInput.getValue());
 							if(newTask.checkDate()) {
 							   GUI1ButtonsandListPane.displayedList.add(newTask);
+								GUI1ButtonsandListPane.listView.setFocusTraversable(true);
+								GUI1ButtonsandListPane.listView.refresh();
+								GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
 							   mainWindow.setScene(scene1);
 							}
 							else
@@ -408,7 +411,7 @@ public class AddWindow{
 												GUI1ButtonsandListPane.listView.refresh();
 												GUI1ButtonsandListPane.listView.setItems(GUI1ButtonsandListPane.displayedList);
 									
-												System.out.println(GUI1ButtonsandListPane.displayedList.toString());
+												
 										
 											
 											mainWindow.setScene(scene1);

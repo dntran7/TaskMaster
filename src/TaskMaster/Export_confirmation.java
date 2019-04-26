@@ -1,6 +1,6 @@
 package TaskMaster;
 
-//import com.apple.eawt.Application;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,7 +17,6 @@ public class Export_confirmation extends Application{
 	private BorderPane bp;
 
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
 		
 	}
 	public void start(Stage stage, String name, boolean exist) {
